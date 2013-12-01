@@ -2,6 +2,8 @@ import os
 import pdb
 from math import log, ceil
 from operator import itemgetter
+import pickle
+import time
 
 import numpy as np
 
@@ -9,23 +11,27 @@ from parser import Parser
 
 
 class Node:
-	def __init__(self, left=None, right=None,
-				 data=None, criterion=None, label=None, depth=None):
+	def __init__(self, left=None, right=None, criterion=None, label=None, depth=None):
 		# in our case, it is on whether the document has a word -- a string
 		self.criterion = criterion
 		self.left = left
 		self.right = right
-		self.data = data
 		self.label = label
 		self.depth = depth
+		self.parser = None
 
-	def get_label(self, tweet):
+	def get_label(self, tweet, tweet_cleaned=False):
+		if self.parser is None:
+			self.parser = Parser()
+		if not tweet_cleaned:
+			tweet = self.parser.stem_sentence_porter(tweet)
+			tweet_cleaned = True
 		if self.criterion:
 			if self.criterion in tweet:
 				# if has, go right, else left
-				return self.left.get_point_label(tweet)
+				return self.left.get_label(tweet, tweet_cleaned)
 			else:
-				return self.right.get_point_label(tweet)
+				return self.right.get_label(tweet, tweet_cleaned)
 		return self.label
 
 class DecisionTree:
@@ -56,6 +62,7 @@ class DecisionTree:
 
 		print 'Current depth: {}'.format(depth)
 		criterion_word, words_used = self.max_gain(pos_data, neg_data, words_used)
+		root.criterion = criterion_word
 
 		# cps = set positive tweets that contain the word
 		# cns = set negative tweets that contain the word
@@ -65,6 +72,7 @@ class DecisionTree:
 
 		root.left = self.create_decision_tree_for_k(ncps, ncns, depth+1, attr, words_used)
 		root.right = self.create_decision_tree_for_k(cps, cns, depth+1, attr, words_used)
+		return root
 
 	def entropy(self, pos_data, neg_data):
 		'''
@@ -83,6 +91,8 @@ class DecisionTree:
 		neg = tot-pos
 		if neg == 0:
 			neg = tot
+		if tot == 0:
+			return 0
 		return -(pos/tot)*log(pos/tot,2)-(neg/tot)*log(neg/tot,2)
 
 
@@ -106,6 +116,7 @@ class DecisionTree:
 	def max_gain(self, pos_data, neg_data, words_used):
 		max_gain = 0
 		max_word = None
+		count = 0
 		for key in self.keys:
 			# print 'Trying key: {}'.format(key)
 			if key not in words_used:
@@ -113,6 +124,9 @@ class DecisionTree:
 				if gain > max_gain:
 					max_gain = gain
 					max_word = key
+				if count%100 == 0:
+					print count
+				count += 1
 		words_used.append(max_word)
 		return max_word, words_used
 
@@ -121,6 +135,7 @@ class DecisionTree:
 		not_contains_pos_set = []
 		contains_neg_set = []
 		not_contains_neg_set = []
+
 		for i in range(len(pos_data)):
 			if word in pos_data[i][1]:
 				contains_pos_set.append(pos_data[i])
@@ -137,8 +152,21 @@ tree = DecisionTree()
 data = tree.parser.load_data('../data/train.csv')
 data = tree.parser.porter_stem_data(data)
 index, index_map = tree.parser.index_data(data)
-tree.keys = index.keys()
+keys = index.keys()
+for key in keys:
+	if index[key] == 1:
+		keys.remove(key)
+	try:
+		number = int(key)
+		keys.remove(key)
+	except:
+		pass
+tree.keys = keys
 pos_data, neg_data = tree.parser.get_label_divided_data(data, 'k1')
-tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1', words_used=[])
+dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1', words_used=[])
+tweet = "its a sunny day today!"
+label = dt.get_label(tweet)
+# write the tree to file
+pdb.set_trace()
 
 
