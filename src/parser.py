@@ -36,6 +36,9 @@ class Parser:
 		sentence = self.clean_sentence(sentence)
 		return [stemmer.stem(word) for word in sentence]
 
+	def stem_sentence_porter(self, sentence):
+		return self.stem_sentence(PorterStemmer(), sentence)
+
 	def stem_data(self, stemmer, data):
 		print 'Stemming tweets...'
 		for i in range(len(data['tweet'])):
