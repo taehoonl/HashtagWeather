@@ -64,18 +64,19 @@ class Parser:
 					map_count += 1
 		return index, index_map
 
-	def organize_data(self, data):
-		data_list = []
-		label_keys = ['w1', 'w2', 'w3', 'w4', 'k1', 'k2', 'k3', 'k4',
-					  'k5', 'k6', 'k7', 'k8', 'k9', 'k10', 'k11', 'k12',
-					  'k13', 'k14', 'k15']
-		for i in range(len(data)):
-			labels = {}
-			for key in label_keys:
-				pass
-				# labels[key] =
-		pdb.set_trace()
-		pass
+	def labeled_index_data(self, data, labeled_data):
+		index = {}
+		index_map = {}
+		map_count = 1
+		for tweet_id, tweet in labeled_data:
+			for word in tweet:
+				try:
+					index[word] += 1
+				except:
+					index[word] = 1
+					index_map[word] = map_count
+					map_count += 1
+		return index, index_map
 
 	def get_label_divided_data(self, data, label_key):
 		pos_data = []
@@ -190,6 +191,7 @@ data = parser.load_data('../data/train.csv')
 data = parser.porter_stem_data(data)
 pdb.set_trace()
 pos, neg = parser.get_label_divided_data(data, 'k1')
+pos_index, idx_map = parser.labeled_index_data(data, pos)
 pdb.set_trace()
 # index, index_map = parser.index_data(data)
 # svm_data = parser.svmlight_format_to_file(data, index, index_map)
