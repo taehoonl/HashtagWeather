@@ -9,13 +9,14 @@ from nltk.tokenize import RegexpTokenizer
 
 class Parser:
 
-	def __init__(self):
+	def __init__(self, threshold=0.7):
 		self.tokenizer = RegexpTokenizer(r'\w+')
 		self.stopwords = ["a", "an", "and", "are", "as", "at", "be", "but", "by",
 						  "for", "if", "in", "into", "is", "it",
 						  "no", "not", "of", "on", "or", "such",
 						  "that", "the", "their", "then", "there", "these",
 						  "they", "this", "to", "was", "will", "with"]
+		self.threshold = threshold
 
 	def load_data(self, path):
 		data = p.read_csv(path)
@@ -62,6 +63,51 @@ class Parser:
 					index_map[word] = map_count
 					map_count += 1
 		return index, index_map
+
+	def organize_data(self, data):
+		data_list = []
+		label_keys = ['w1', 'w2', 'w3', 'w4', 'k1', 'k2', 'k3', 'k4',
+					  'k5', 'k6', 'k7', 'k8', 'k9', 'k10', 'k11', 'k12',
+					  'k13', 'k14', 'k15']
+		for i in range(len(data)):
+			labels = {}
+			for key in label_keys:
+				pass
+				# labels[key] =
+		pdb.set_trace()
+		pass
+
+	def get_label_divided_data(self, data, label_key):
+		pos_data = []
+		neg_data = []
+		t_base = [-1.0]*4
+		w_base = [-1.0]*4
+		time_label_keys = ['w1', 'w2', 'w3', 'w4']
+		weather_label_keys = ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7',
+							  'k8', 'k9', 'k10', 'k11', 'k12', 'k13', 'k14', 'k15']
+		if label_key in time_label_keys:
+			for i in range(len(data['w1'])):
+				t_labels = t_base[:]
+				for j in range(4): # 4 different temporal data
+					t_labels.append(data['w{}'.format(j+1)][i])
+				max_label_idx = t_labels.index(max(temporal_labels))
+				for j in range(4):
+					if j == max_label_idx:
+						pos_data.append([data['id'][i], data['tweet']])
+					else:
+						neg_data.append([data['id'][i], data['tweet']])
+			return pos_data, neg_data
+
+		elif label_key in weather_label_keys:
+			for i in range(len(data['w1'])):
+				if data[label_key][i] > 0.7:
+					pos_data.append([data['id'][i], data['tweet'][i]])
+				else:
+					neg_data.append([data['id'][i], data['tweet'][i]])
+			return pos_data, neg_data
+		else:
+			return None
+
 
 	def svmlight_format_to_file(self, data, index, index_map, segment=False, segment_size=1000):
 		svmlight_temporal_data = ['']*4
@@ -139,9 +185,12 @@ class Parser:
 				multiple += 1
 
 
-# parser = Parser()
-# data = parser.load_data('../data/train.csv')
-# data = parser.porter_stem_data(data)
+parser = Parser()
+data = parser.load_data('../data/train.csv')
+data = parser.porter_stem_data(data)
+pdb.set_trace()
+pos, neg = parser.get_label_divided_data(data, 'k1')
+pdb.set_trace()
 # index, index_map = parser.index_data(data)
 # svm_data = parser.svmlight_format_to_file(data, index, index_map)
 # svm_data = parser.svmlight_format_to_file(data, index, index_map, segment=True, segment_size=7000)
