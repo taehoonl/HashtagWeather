@@ -39,7 +39,7 @@ class Parser:
 	def stem_data(self, stemmer, data):
 		print 'Stemming tweets...'
 		for i in range(len(data['tweet'])):
-			if i%100 == 0:
+			if i%1000 == 0:
 				print i
 			data['tweet'][i] = self.stem_sentence(stemmer, data['tweet'][i])
 		return data
@@ -68,7 +68,7 @@ class Parser:
 		index = {}
 		index_map = {}
 		map_count = 1
-		pdb.set_trace()
+		# pdb.set_trace()
 		for tweet_id, tweet in labeled_data:
 			for word in tweet:
 				try:
@@ -102,13 +102,46 @@ class Parser:
 
 		elif label_key in weather_label_keys:
 			for i in range(len(data['w1'])):
-				if data[label_key][i] > 0.7:
+				if data[label_key][i] > self.threshold:
 					pos_data.append([data['id'][i], data['tweet'][i]])
 				else:
 					neg_data.append([data['id'][i], data['tweet'][i]])
 			return pos_data, neg_data
 		else:
 			return None
+
+	def divide_data(self, data, wk):
+		result = {}
+		time_label_keys = ['w1', 'w2', 'w3', 'w4']
+		weather_label_keys = ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7',
+							  'k8', 'k9', 'k10', 'k11', 'k12', 'k13', 'k14', 'k15']
+
+		if wk is 'w':
+			for k in time_label_keys:
+				result[k] = []
+
+			for i in range(len(data['id'])):
+				list_temp = []
+				for l in time_label_keys:
+					list_temp.append((l, data[l][i]))
+				list_sorted = sorted(list_temp, key=lambda temp: temp[1])
+				top, dontcare = list_sorted[len(time_label_keys)-1]
+				result[top].append([data['id'][i], data['tweet'][i]])
+
+		elif wk is 'k':
+			for k in weather_label_keys:
+				result[k] = []
+
+			for i in range(len(data['id'])):
+				for l in weather_label_keys:
+					if data[l][i] > self.threshold:
+						result[l].append([data['id'][i], data['tweet'][i]])
+
+		else:
+			print "enter either w or k"
+			return None
+
+		return result
 
 
 	def svmlight_format_to_file(self, data, index, index_map, segment=False, segment_size=1000):
