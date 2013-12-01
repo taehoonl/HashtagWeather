@@ -68,6 +68,7 @@ class Parser:
 		index = {}
 		index_map = {}
 		map_count = 1
+		pdb.set_trace()
 		for tweet_id, tweet in labeled_data:
 			for word in tweet:
 				try:
@@ -81,22 +82,22 @@ class Parser:
 	def get_label_divided_data(self, data, label_key):
 		pos_data = []
 		neg_data = []
-		t_base = [-1.0]*4
-		w_base = [-1.0]*4
 		time_label_keys = ['w1', 'w2', 'w3', 'w4']
 		weather_label_keys = ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7',
 							  'k8', 'k9', 'k10', 'k11', 'k12', 'k13', 'k14', 'k15']
 		if label_key in time_label_keys:
+			key_num = int(label_key[1])
 			for i in range(len(data['w1'])):
-				t_labels = t_base[:]
+				t_labels = []
 				for j in range(4): # 4 different temporal data
 					t_labels.append(data['w{}'.format(j+1)][i])
-				max_label_idx = t_labels.index(max(temporal_labels))
-				for j in range(4):
-					if j == max_label_idx:
-						pos_data.append([data['id'][i], data['tweet']])
-					else:
-						neg_data.append([data['id'][i], data['tweet']])
+				max_label_idx = t_labels.index(max(t_labels))
+				if key_num == max_label_idx+1:
+					pos_data.append([data['id'][i], data['tweet'][i]])
+				else:
+					neg_data.append([data['id'][i], data['tweet'][i]])
+				if i%1000 == 0:
+					print i
 			return pos_data, neg_data
 
 		elif label_key in weather_label_keys:
@@ -186,13 +187,12 @@ class Parser:
 				multiple += 1
 
 
-parser = Parser()
-data = parser.load_data('../data/train.csv')
-data = parser.porter_stem_data(data)
-pdb.set_trace()
-pos, neg = parser.get_label_divided_data(data, 'k1')
-pos_index, idx_map = parser.labeled_index_data(data, pos)
-pdb.set_trace()
+# parser = Parser()
+# data = parser.load_data('../data/train.csv')
+# data = parser.porter_stem_data(data)
+# pos, neg = parser.get_label_divided_data(data, 'w1')
+# pos_index, idx_map = parser.labeled_index_data(data, pos)
+# pdb.set_trace()
 # index, index_map = parser.index_data(data)
 # svm_data = parser.svmlight_format_to_file(data, index, index_map)
 # svm_data = parser.svmlight_format_to_file(data, index, index_map, segment=True, segment_size=7000)
