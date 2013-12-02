@@ -86,6 +86,7 @@ def svm_classify():
 	pdb.set_trace()
 
 def bayes_classify():
+
 	time_label_keys = ['w1', 'w2', 'w3', 'w4']
 	weather_label_keys = ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7',
 						'k8', 'k9', 'k10', 'k11', 'k12', 'k13', 'k14', 'k15']
@@ -142,7 +143,7 @@ def bayes_classify():
 		time_negative_xs.append(neg_index)
 
 	time_nb = MultiNaiveBayes(time_label_keys, vocab_size, time_positive_ys, time_negative_ys, time_positive_xs, time_negative_xs)
-	print "finished training for w[1-4] naive bayes classifier"
+	# print "finished training for w[1-4] naive bayes classifier"
 
 	# classify temporal
 	tweets = validation_data['tweet']
@@ -160,6 +161,7 @@ def bayes_classify():
 		total += 1
 		if temporal_classifications[i] == temporal_labels[i]:
 			correct += 1
+	print "threshold : {}".format(threshold)
 	print "time accurracy : " + str(float(correct)/float(total))
 	# pdb.set_trace()
 
@@ -179,7 +181,7 @@ def bayes_classify():
 		weather_negative_xs.append(neg_index)
 
 	weather_nb = MultiNaiveBayes(weather_label_keys, vocab_size, weather_positive_ys, weather_negative_ys, weather_positive_xs, weather_negative_xs)
-	print "finished training for k[1-15] naive bayes classifier"
+	# print "finished training for k[1-15] naive bayes classifier"
 
 	# classify weather
 	tweets = validation_data['tweet']
@@ -193,7 +195,7 @@ def bayes_classify():
 		# for i, f in enumerate(weather_label_keys):
 		# 	if w_dict[f] > threshold:
 		# 		result[i] = 1
-		result = weather_nb.classify_all(t, threshold)
+		result = weather_nb.classify_all(t, 0)#threshold)
 		weather_classifications.append(result)
 
 	# accuracy ()
@@ -211,7 +213,6 @@ def bayes_classify():
 		acc += float(correct[i])/ float(total)
 
 	print "weather accuracy : {}".format(acc/float(len(weather_label_keys)))
-	print "threshold : {}".format(threshold)
 	pdb.set_trace()	
 
 	'''
@@ -257,179 +258,183 @@ bayes_classify()
 Multinomial Bayes result
 
 threshold : 0.1
-time accurracy : 0.494077400043
-weather accuracy : 0.636014539235
-k1 accuracy : 0.747316655976
-k2 accuracy : 0.714646140688
-k3 accuracy : 0.48300192431
-k4 accuracy : 0.691768227496
-k5 accuracy : 0.726149240966
-k6 accuracy : 0.16805644644
-k7 accuracy : 0.544408809066
-k8 accuracy : 0.353944836434
-k9 accuracy : 0.628864656831
-k10 accuracy : 0.765191361984
-k11 accuracy : 0.802822322001
-k12 accuracy : 0.751336326705
-k13 accuracy : 0.687363694676
-k14 accuracy : 0.707804147958
-k15 accuracy : 0.767543296985
+time accurracy : 0.345806591972
+k1 accuracy : 0.479930381812
+k2 accuracy : 0.483465680409
+k3 accuracy : 0.761285760905
+k4 accuracy : 0.49271184597
+k5 accuracy : 0.49934732949
+k6 accuracy : 0.929783530947
+k7 accuracy : 0.554008484717
+k8 accuracy : 0.863483084956
+k9 accuracy : 0.499673664745
+k10 accuracy : 0.419721527249
+k11 accuracy : 0.412596540846
+k12 accuracy : 0.404438159469
+k13 accuracy : 0.48607636245
+k14 accuracy : 0.595398672903
+k15 accuracy : 0.437941912325
+weather accuracy : 0.55465752928
 
 
 threshold : 0.2
-time accurracy : 0.494077400043
-weather accuracy : 0.742188012259
-k1 accuracy : 0.855377378662
-k2 accuracy : 0.804618345093
-k3 accuracy : 0.668163352576
-k4 accuracy : 0.781526619628
-k5 accuracy : 0.839255933291
-k6 accuracy : 0.294419499679
-k7 accuracy : 0.612999786188
-k8 accuracy : 0.521744708146
-k9 accuracy : 0.748770579431
-k10 accuracy : 0.834723113107
-k11 accuracy : 0.89339320077
-k12 accuracy : 0.804575582638
-k13 accuracy : 0.771349155442
-k14 accuracy : 0.846440025657
-k15 accuracy : 0.855462903571
+time accurracy : 0.345806591972
+k1 accuracy : 0.4780811487
+k2 accuracy : 0.478896986838
+k3 accuracy : 0.765963232895
+k4 accuracy : 0.483465680409
+k5 accuracy : 0.495485695638
+k6 accuracy : 0.93027303383
+k7 accuracy : 0.534319590993
+k8 accuracy : 0.865441096486
+k9 accuracy : 0.488469487654
+k10 accuracy : 0.414935276841
+k11 accuracy : 0.411835091918
+k12 accuracy : 0.401990645056
+k13 accuracy : 0.471826389644
+k14 accuracy : 0.594854780811
+k15 accuracy : 0.43489611661
+weather accuracy : 0.550048950288
+
 
 threshold : 0.3
-weather accuracy : 0.81780058442
-time accurracy : 0.494077400043
-k1 accuracy : 0.923412443874
-k2 accuracy : 0.859910198845
-k3 accuracy : 0.816720119735
-k4 accuracy : 0.837802009835
-k5 accuracy : 0.900577293137
-k6 accuracy : 0.442420354928
-k7 accuracy : 0.66632456703
-k8 accuracy : 0.667564678213
-k9 accuracy : 0.87765661749
-k10 accuracy : 0.867051528758
-k11 accuracy : 0.933547145606
-k12 accuracy : 0.830318580287
-k13 accuracy : 0.826598246739
-k14 accuracy : 0.915287577507
-k15 accuracy : 0.901817404319
+time accurracy : 0.345806591972
+k1 accuracy : 0.477210921353
+k2 accuracy : 0.472370281736
+k3 accuracy : 0.77227238116
+k4 accuracy : 0.473294898292
+k5 accuracy : 0.491787229414
+k6 accuracy : 0.930762536713
+k7 accuracy : 0.518111606657
+k8 accuracy : 0.868432502991
+k9 accuracy : 0.480909387578
+k10 accuracy : 0.410964864571
+k11 accuracy : 0.41167192429
+k12 accuracy : 0.39976068748
+k13 accuracy : 0.455835962145
+k14 accuracy : 0.594909170021
+k15 accuracy : 0.43157837485
+weather accuracy : 0.545991515283
 
 threshold : 0.4
-weather accuracy : 0.861309956525
-time accurracy : 0.494077400043
-k1 accuracy : 0.954800085525
-k2 accuracy : 0.882018387855
-k3 accuracy : 0.908445584777
-k4 accuracy : 0.862091084028
-k5 accuracy : 0.93508659397
-k6 accuracy : 0.583921317084
-k7 accuracy : 0.697070771862
-k8 accuracy : 0.772974128715
-k9 accuracy : 0.929826812059
-k10 accuracy : 0.882232200128
-k11 accuracy : 0.949967928159
-k12 accuracy : 0.840153944836
-k13 accuracy : 0.844130853111
-k14 accuracy : 0.951892238614
-k15 accuracy : 0.925037417148
+time accurracy : 0.345806591972
+k1 accuracy : 0.47606874796
+k2 accuracy : 0.470901773088
+k3 accuracy : 0.772326770369
+k4 accuracy : 0.467420863701
+k5 accuracy : 0.48542369194
+k6 accuracy : 0.930980093549
+k7 accuracy : 0.508865441096
+k8 accuracy : 0.869465897966
+k9 accuracy : 0.479060154465
+k10 accuracy : 0.408734906994
+k11 accuracy : 0.411508756663
+k12 accuracy : 0.398890460133
+k13 accuracy : 0.451430436201
+k14 accuracy : 0.594528445556
+k15 accuracy : 0.42564995105
+weather accuracy : 0.543417092715
 
 
 threshold : 0.5
-weather accuracy : 0.891568669375
-time accurracy : 0.494077400043
-k1 accuracy : 0.971092580714
-k2 accuracy : 0.897241821681
-k3 accuracy : 0.95672439598
-k4 accuracy : 0.882488774856
-k5 accuracy : 0.953645499252
-k6 accuracy : 0.709471883686
-k7 accuracy : 0.724738079966
-k8 accuracy : 0.847637374385
-k9 accuracy : 0.967201197349
-k10 accuracy : 0.891982039769
-k11 accuracy : 0.957836219799
-k12 accuracy : 0.848321573658
-k13 accuracy : 0.85704511439
-k14 accuracy : 0.968013683985
-k15 accuracy : 0.940089801155
+time accurracy : 0.345806591972
+k1 accuracy : 0.475470466659
+k2 accuracy : 0.466931360818
+k3 accuracy : 0.773360165343
+k4 accuracy : 0.461764385946
+k5 accuracy : 0.479767214185
+k6 accuracy : 0.931143261177
+k7 accuracy : 0.500435113673
+k8 accuracy : 0.870009790058
+k9 accuracy : 0.479168932884
+k10 accuracy : 0.406885673882
+k11 accuracy : 0.411563145872
+k12 accuracy : 0.398564124878
+k13 accuracy : 0.44686174263
+k14 accuracy : 0.594474056347
+k15 accuracy : 0.419123245948
+weather accuracy : 0.541034845353
+
 
 threshold : 0.6
-time accurracy : 0.494077400043
-weather accuracy : 0.912753189366
-k1 accuracy : 0.979773358991
-k2 accuracy : 0.907333760958
-k3 accuracy : 0.980842420355
-k4 accuracy : 0.893820825315
-k5 accuracy : 0.967757109258
-k6 accuracy : 0.809707077186
-k7 accuracy : 0.753474449433
-k8 accuracy : 0.907590335685
-k9 accuracy : 0.980885182809
-k10 accuracy : 0.899337181954
-k11 accuracy : 0.96262561471
-k12 accuracy : 0.854479367116
-k13 accuracy : 0.865255505666
-k14 accuracy : 0.97695103699
-k15 accuracy : 0.951464614069
+time accurracy : 0.345806591972
+k1 accuracy : 0.474219514848
+k2 accuracy : 0.464647014032
+k3 accuracy : 0.773686500598
+k4 accuracy : 0.458446644186
+k5 accuracy : 0.471935168063
+k6 accuracy : 0.931360818014
+k7 accuracy : 0.493201348852
+k8 accuracy : 0.870553682149
+k9 accuracy : 0.480528663113
+k10 accuracy : 0.405199608398
+k11 accuracy : 0.410692918525
+k12 accuracy : 0.397530729903
+k13 accuracy : 0.444087892962
+k14 accuracy : 0.594147721092
+k15 accuracy : 0.412433373219
+weather accuracy : 0.538844773197
 
 
 threshold : 0.7
-time accurracy : 0.494077400043
-weather accuracy : 0.928164777992
-k1 accuracy : 0.985246953175
-k2 accuracy : 0.916484926235
-k3 accuracy : 0.991533033996
-k4 accuracy : 0.906264699594
-k5 accuracy : 0.975967500535
-k6 accuracy : 0.884755184948
-k7 accuracy : 0.779345734445
-k8 accuracy : 0.942783835792
-k9 accuracy : 0.990250160359
-k10 accuracy : 0.906179174685
-k11 accuracy : 0.966003848621
-k12 accuracy : 0.860936497755
-k13 accuracy : 0.872354073124
-k14 accuracy : 0.982424631174
-k15 accuracy : 0.961941415437
+time accurracy : 0.345806591972
+k1 accuracy : 0.473022952246
+k2 accuracy : 0.461220493854
+k3 accuracy : 0.774121614272
+k4 accuracy : 0.454530621125
+k5 accuracy : 0.466550636354
+k6 accuracy : 0.93157837485
+k7 accuracy : 0.487544871098
+k8 accuracy : 0.870771238986
+k9 accuracy : 0.480637441532
+k10 accuracy : 0.402860872403
+k11 accuracy : 0.410257804852
+k12 accuracy : 0.395844664419
+k13 accuracy : 0.442293049059
+k14 accuracy : 0.59365821821
+k15 accuracy : 0.406015446535
+weather accuracy : 0.536727219986
+
 
 threshold : 0.8
-time accurracy : 0.494077400043
-weather accuracy : 0.945418002993
-k1 accuracy : 0.98969424845
-k2 accuracy : 0.926918965149
-k3 accuracy : 0.996151379089
-k4 accuracy : 0.917169125508
-k5 accuracy : 0.982381868719
-k6 accuracy : 0.966645285439
-k7 accuracy : 0.830147530468
-k8 accuracy : 0.981526619628
-k9 accuracy : 0.993500106906
-k10 accuracy : 0.916185589053
-k11 accuracy : 0.968740645713
-k12 accuracy : 0.87269617276
-k13 accuracy : 0.883130211674
-k14 accuracy : 0.986572589267
-k15 accuracy : 0.969809707077
+time accurracy : 0.345806591972
+k1 accuracy : 0.468563037093
+k2 accuracy : 0.451647993038
+k3 accuracy : 0.773795279017
+k4 accuracy : 0.443761557707
+k5 accuracy : 0.461166104645
+k6 accuracy : 0.931252039595
+k7 accuracy : 0.43489611661
+k8 accuracy : 0.870608071359
+k9 accuracy : 0.478353094746
+k10 accuracy : 0.39307081475
+k11 accuracy : 0.407592733602
+k12 accuracy : 0.384259762863
+k13 accuracy : 0.431360818014
+k14 accuracy : 0.591537039051
+k15 accuracy : 0.398074621995
+weather accuracy : 0.527995938939
 
 
 threshold : 0.9
-weather accuracy : 0.954691753973
-time accurracy : 0.494077400043
-k1 accuracy : 0.992901432542
-k2 accuracy : 0.936668804789
-k3 accuracy : 0.998075689545
-k4 accuracy : 0.92674791533
-k5 accuracy : 0.986529826812
-k6 accuracy : 0.995082317725
-k7 accuracy : 0.856232627753
-k8 accuracy : 0.994611930725
-k9 accuracy : 0.995082317725
-k10 accuracy : 0.925721616421
-k11 accuracy : 0.970109044259
-k12 accuracy : 0.883472311311
-k13 accuracy : 0.893222150951
-k14 accuracy : 0.989052811631
-k15 accuracy : 0.97686551208
+time accurracy : 0.345806591972
+k1 accuracy : 0.465680409007
+k2 accuracy : 0.442075492222
+k3 accuracy : 0.773468943762
+k4 accuracy : 0.433971500054
+k5 accuracy : 0.45686935712
+k6 accuracy : 0.931197650386
+k7 accuracy : 0.408571739367
+k8 accuracy : 0.87049929294
+k9 accuracy : 0.477102142935
+k10 accuracy : 0.38311758947
+k11 accuracy : 0.406559338627
+k12 accuracy : 0.374904818884
+k13 accuracy : 0.421135646688
+k14 accuracy : 0.589796584358
+k15 accuracy : 0.391384749266
+weather accuracy : 0.521755683672
+
 '''
 
 
