@@ -11,8 +11,8 @@ class SVM:
 
 	def __init__(self):
 		self.parser = Parser()
-		self.w_models = []
-		self.t_models = []
+		self.weather_models = []
+		self.time_models = []
 		self.default_data_features = []
 		self.data = None
 		self.index = None
@@ -105,7 +105,7 @@ class SVM:
 	def initialize_svm(self):
 		self.load_all_models()
 		if self.index is None:
-			data = self.parser.load_data('data/train.csv')
+			data = self.parser.load_data('../data/train.csv')
 			data = self.parser.porter_stem_data(data)
 			self.data = data
 			index, index_map = self.parser.index_data(data)
@@ -114,26 +114,26 @@ class SVM:
 
 	def load_all_models(self):
 		for i in range(4):
-			filepath = 'data/svm/new_models/new_c_w{}.model1'.format(i+1)
+			filepath = '../data/svm/new_models/new_c_w{}.model1'.format(i+1)
 			model = self.read_model(filepath)
-			self.t_models.append(model)
+			self.time_models.append(model)
 
 		for i in range(15):
-			filepath = 'data/svm/new_models/new_c_k{}.model0.1'.format(i+1)
+			filepath = '../data/svm/new_models/new_c_k{}.model0.1'.format(i+1)
 			model = self.read_model(filepath)
-			self.w_models.append(model)
+			self.weather_models.append(model)
 
 	def classify_tweet(self, tweet):
 		try:
 			tweet = self.parser.stem_sentence_porter(tweet)
 			formatted_tweet = self.format_tweet_for_svmlight(tweet)
-			t_class = []
-			w_class = []
-			for model in self.t_models:
-				t_class.append(self.classify(model, formatted_tweet)[0])
-			for model in self.w_models:
-				w_class.append(self.classify(model, formatted_tweet)[0])
-			return t_class, w_class
+			time_class = []
+			weather_class = []
+			for model in self.time_models:
+				time_class.append(self.classify(model, formatted_tweet)[0])
+			for model in self.weather_models:
+				weather_class.append(self.classify(model, formatted_tweet)[0])
+			return weather_class, time_class
 		except:
 			print 'You have yet to load the models.'
 			print 'Please load all models with load_all_models()'

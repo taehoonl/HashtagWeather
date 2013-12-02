@@ -3,37 +3,12 @@ import pdb
 from math import log, ceil
 from operator import itemgetter
 import pickle
+from node import Node
 import time
 
 import numpy as np
 
 from parser import Parser
-
-
-class Node:
-	def __init__(self, left=None, right=None, criterion=None, label=None, depth=None):
-		# in our case, it is on whether the document has a word -- a string
-		self.criterion = criterion
-		self.left = left
-		self.right = right
-		self.label = label
-		self.depth = depth
-		self.parser = None
-
-	def get_label(self, tweet, tweet_cleaned=False):
-		if self.parser is None:
-			self.parser = Parser()
-		if not tweet_cleaned:
-			# tweet = self.parser.stem_sentence_porter(tweet)
-			tweet_cleaned = True
-		if self.criterion:
-			print self.criterion
-			if self.criterion in tweet:
-				# if has, go right, else left
-				return self.right.get_label(tweet, tweet_cleaned)
-			else:
-				return self.left.get_label(tweet, tweet_cleaned)
-		return self.label
 
 class DecisionTree:
 
@@ -41,6 +16,25 @@ class DecisionTree:
 		self.root = None
 		self.keys = None
 		self.parser = Parser()
+		self.w_trees = []
+		self.t_trees = []
+
+	def initialize_dt(self):
+		for i in range(15):
+			rel_path = '../data/decision_tree/dt_k{}.tree'.format(i+1)
+			self.w_trees.append(self.load_tree(rel_path))
+		for i in range(4):
+			rel_path = '../data/decision_tree/dt_w{}.tree'.format(i+1)
+			self.t_trees.append(self.load_tree(rel_path))
+
+	def classify_tweet(self, tweet):
+		weather_labels = []
+		time_labels = []
+		for tree in self.w_trees:
+			weather_labels.append(tree.get_label(tweet))
+		for tree in self.t_trees:
+			time_labels.append(tree.get_label(tweet))
+		return weather_labels, time_labels
 
 	def create_decision_tree_for_k(self, pos_data, neg_data, depth, attr, max_depth=None):
 		'''
@@ -175,37 +169,10 @@ class DecisionTree:
 		accuracy = float(correct)/(correct+wrong)
 		print "Accuracy of tree is: {}".format(accuracy)
 
-	def load_tree(self, filename):
-		f = open(filename, 'r')
+	def load_tree(self, rel_path):
+		abs_path = os.path.abspath(rel_path)
+		f = open(abs_path, 'r')
 		dt = pickle.load(f)
 		return dt
-
-# tree = DecisionTree()
-# data = tree.parser.load_data('../data/train_tree.csv')
-# data = tree.parser.porter_stem_data(data)
-# index, index_map = tree.parser.index_data(data)
-# keys = index.keys()
-# for key in keys:
-# 	if index[key] == 1:
-# 		keys.remove(key)
-# 	try:
-# 		number = int(key)
-# 		keys.remove(key)
-# 	except:
-# 		pass
-# tree.keys = keys
-# # for i in range(4):
-# # 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'w{}'.format(i+1))
-# # 	dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='w{}'.format(i+1), max_depth=15)
-# # 	filename = 'dt_w{}.tree'.format(i+1)
-# # 	f = open(filename, 'w')
-# # 	pickle.dump(dt, f)
-# for i in range(12,15):
-# 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'k{}'.format(i+1))
-# 	dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k{}'.format(i+1), max_depth=15)
-# 	filename = 'dt_k{}.tree'.format(i+1)
-# 	f = open(filename, 'w')
-# 	pickle.dump(dt, f)
-# pdb.set_trace()
 
 
