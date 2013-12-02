@@ -99,8 +99,6 @@ class Parser:
 					pos_data.append([data['id'][i], data['tweet'][i]])
 				else:
 					neg_data.append([data['id'][i], data['tweet'][i]])
-				if i%1000 == 0:
-					print i
 			return pos_data, neg_data
 
 		elif label_key in weather_label_keys:
