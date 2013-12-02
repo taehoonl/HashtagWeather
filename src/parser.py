@@ -119,6 +119,8 @@ class Parser:
 		svmlight_weather_data = ['']*15
 		multiple = 1
 
+		pdb.set_trace()
+
 		print 'Converting data to SVMLight format...\n'
 
 		for i in range(len(data['tweet'])): # skip if it is not related to the weather
@@ -163,7 +165,7 @@ class Parser:
 					labeled_entry += entry
 					svmlight_weather_data[j] += labeled_entry
 
-			if (i%segment_size == 0 and i) > 0 or i == len(data['tweet']):
+			if (i%segment_size == 0 and i) > 0 or i == len(data['tweet'])-1:
 				print 'Converted {} of {}'.format(i, len(data['tweet']))
 				idx = 1
 				for d in svmlight_temporal_data:
@@ -198,7 +200,7 @@ class Parser:
 # pdb.set_trace()
 # index, index_map = parser.index_data(data)
 # svm_data = parser.svmlight_format_to_file(data, index, index_map)
-# svm_data = parser.svmlight_format_to_file(data, index, index_map, segment=True, segment_size=7000)
+# svm_data = parser.svmlight_format_to_file(data, index, index_map, segment=True, segment_size=10000)
 
 
 
