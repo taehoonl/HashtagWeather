@@ -1,6 +1,8 @@
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
+import json
+from pprint import pprint
 
 """Code to stream the tweets live from the web.
 The following library was used - tweepy - accessible from 
@@ -24,38 +26,26 @@ total = 0
 class listener(StreamListener):
 	def on_data(self, data):
 		global total
-
-		time = None
-		tweet = None
-		coordinates = ""
-		location = ""
 		try:
-			# split up the data
-			if '"created_at"' in data:
-				time = data.split('"created_at":"')[1].split('","id')[0] # the full time stamp
-			# print time			
-			if ',"text":"' in data:
-				tweet = data.split(',"text":"')[1].split('","source')[0] # the full tweet text
-			# print tweet
-			if ',"coordinates":' in data:
-				coordinates = data.split(',"coordinates":')[1].split(',"place')[0] # the full coordinates
-			# print coordinates
-			if ',"location:":' in data:
-				location = data.split(',"location":"')[1].split(',"url":')[0]
-
-			if time is not None and tweet is not None:
-				total += 1
-				if total % 1000 == 0:
-					print "Saved " + str(total) + " tweets"
-				# data is saved in the order of 
-				# time, text, location, coordinates
-				saveThis = time+"||"+tweet+"||"+location+"||"+coordinates
-				saveFile = open('twitDB.txt', 'a')
-				saveFile.write(saveThis + "\n")
-				saveFile.close()
+			tweet = json.loads(data)
+			#pprint (tweet)
+			time = tweet["created_at"]
+			text = tweet["text"]
+			coordinates = tweet["coordinates"]
+			location = tweet["user"]["location"]
+			total += 1
+			if total % 1000 == 0:
+				print "Saved " + str(total) + " tweets"
+			# make json in the order of time, text, location, coordinates
+			l = {'time': time, 'text': text, 'location': location, 'coordinates': coordinates}
+			saveThis = json.dumps(l)
+			saveFile = open('twitDB.txt', 'a')
+			saveFile.write(saveThis + "\n")
+			saveFile.close()
 			return True
 		except BaseException, e:
 			print "Failed on_data, ", str(e)
+			pprint(tweet)
 			
 	
 	def on_error(self, status):

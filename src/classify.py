@@ -213,13 +213,15 @@ def bayes_classify():
 		acc += float(correct[i])/ float(total)
 
 	print "weather accuracy : {}".format(acc/float(len(weather_label_keys)))
-	pdb.set_trace()	
 
 	'''
 	write object files for classifiers
 	'''
-	
+	pickle_obj("time_nb.obj", time_nb)
+	pickle_obj("weather_nb.obj", weather_nb)
 
+	abc = unpickle_obj("weather_nb.obj")
+	pdb.set_trace()	
 
 	'''
 	using MultinomialNaiveBayes
@@ -251,8 +253,7 @@ def bayes_classify():
 	# pdb.set_trace()
 
 
-# svm_classify()
-bayes_classify()
+
 
 '''
 Multinomial Bayes result
@@ -437,8 +438,21 @@ weather accuracy : 0.521755683672
 
 '''
 
+def pickle_obj(filename, obj):
+	f = open(filename, "w")
+	pickle.dump(obj, f)
+	f.close()
+	print "finished pickling"
+
+def unpickle_obj(filename):
+	f = open(filename, "r")
+	obj = pickle.load(f)
+	f.close()
+	print "finished unpickling"
+	return obj
 
 
-
+# svm_classify()
+bayes_classify()
 
 
