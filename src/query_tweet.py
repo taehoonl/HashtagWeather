@@ -4,10 +4,11 @@ import numpy as np
 import math
 import json
 from pygeocoder import Geocoder
+import pickle
 
 class Query:
 
-	def __init__(self, data_path):
+	def __init__(self):
 		self.R = 3959
 		self.coordinates = 0
 		self.locations = 0
@@ -15,13 +16,34 @@ class Query:
 		self.entry_length = 3 # 
 		self.tweet_data = []
 
+	def process_file(self, data_path):
 		# process data
+		self.tweet_data = []
 		with open(data_path) as f:
 			content = f.readlines()
 			# l = json with 'time' 'text' 'location' 'coordinates'
 			for l in content:
 				j = json.loads(l)
 				self.process_tweet(j)
+
+	def save_data(self, data_path):
+		f = open(data_path, 'a')
+		print "before"
+		pickle.dump(self.tweet_data, f)
+		print "after"
+		f.close()
+
+	def read_data(self, data_path):
+		lists = []
+		infile = open(data_path, 'r')
+		while 1:
+		    try:
+		        lists = lists + pickle.load(infile)
+		    except (EOFError):
+		    	print "done reading in all pickled files"
+		        break
+		infile.close()
+		self.tweet_data = lists
 
 	def count(self):
 		return len(self.tweet_data), self.coordinates, self.locations
@@ -31,8 +53,8 @@ class Query:
 			results = Geocoder.geocode(str)
 			print results.coordinates
 			return results.coordinates[0], results.coordinates[1]
-		except:
-			print "geocode cannot find lat/lng for: " + str
+		except Exception,e: 
+			print e
 			return None, None
 
 	def distance(self, lat1, lon1, lat2, lon2):
@@ -88,6 +110,6 @@ class Query:
 
 
 if __name__ == '__main__':
-	query = Query('../data/twitDB/twitDB-short.txt')
+	query = Query('../data/twitDB/twitDB.txt')
 	pdb.set_trace()
 	print 'done'
