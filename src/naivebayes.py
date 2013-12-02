@@ -4,7 +4,7 @@ import math
 import numpy as np
 import svmlight_loader as svml
 
-class BinaryNaiveBayes():
+class NaiveBayes():
 
 	def __init__(self, feature, vocab_size, positive_y, negative_y, positive_x, negative_x):
 		self.feature = feature 							# string... (ex) 'k1' 'w1'
@@ -44,19 +44,38 @@ class BinaryNaiveBayes():
 				s += math.log(float(1+px[e]) / float(self.vocab_size+tw))
 		return s
 
-class MultiBinaryNaiveBayes():
+class MultiNaiveBayes():
 
 	def __init__(self, features, vocab_size, positive_ys, negative_ys, positive_xs, negative_xs):
+		self.features = features
 		self.nb = {}
 		for idx, f in enumerate(features):
-			self.nb[f] = BinaryNaiveBayes(f, vocab_size, positive_ys[idx], negative_ys[idx], positive_xs[idx], negative_xs[idx])
+			self.nb[f] = NaiveBayes(f, vocab_size, positive_ys[idx], negative_ys[idx], positive_xs[idx], negative_xs[idx])
 
-	def classify(self, example):
+	def classify_multi(self, example):
 		result = []
 		for f in self.nb:
 			classifier = self.nb[f]
 			s = classifier.classify(example)
 			result.append((f,s))
+		return result
+
+	def classify_top(self, example):
+		w = self.classify_multi(example)
+		w_sorted = sorted(w, key=lambda (a,b): b)
+		top, dontcare = w_sorted[len(self.features)-1]
+		return top
+
+	def classify_all(self, example, threshold):
+		result = [-1] * len(self.features)
+		w_dict = {}
+		w = self.classify_multi(example)
+		for (k,v) in w:
+			w_dict[k] = v
+
+		for i, f in enumerate(self.features):
+			if w_dict[f] > threshold:
+				result[i] = 1
 		return result
 
 class MultinomialNaiveBayes():
