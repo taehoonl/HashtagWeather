@@ -22,10 +22,11 @@ access_token = '1878195553-HTpislJVIvUrvH9RdferyT92bmYcLwlvEbrhpIc'
 access_secret = 'uYzyPFFHwrjjFKCiuLDn2nlaaQQcMnQfb3e6ajmHZUluk'
 
 total = 0
-
+file_count = 1
 class listener(StreamListener):
 	def on_data(self, data):
 		global total
+		global file_count
 		try:
 			tweet = json.loads(data)
 			#pprint (tweet)
@@ -33,15 +34,18 @@ class listener(StreamListener):
 			text = tweet["text"]
 			coordinates = tweet["coordinates"]
 			location = tweet["user"]["location"]
-			total += 1
+			
 			if total % 1000 == 0:
 				print "Saved " + str(total) + " tweets"
+				file_count += 1
 			# make json in the order of time, text, location, coordinates
-			l = {'time': time, 'text': text, 'location': location, 'coordinates': coordinates}
-			saveThis = json.dumps(l)
-			saveFile = open('../data/twitDB.txt', 'a')
-			saveFile.write(saveThis + "\n")
-			saveFile.close()
+			if location is not "" or 'null' not in coordinates:
+				total += 1
+				l = {'time': time, 'text': text, 'location': location, 'coordinates': coordinates}
+				saveThis = json.dumps(l)
+				saveFile = open('../data/twitDB_' + file_count + '.txt', 'a')
+				saveFile.write(saveThis + "\n")
+				saveFile.close()
 			return True
 		except BaseException, e:
 			print "Failed on_data, ", str(e)
