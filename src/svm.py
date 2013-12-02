@@ -105,7 +105,7 @@ class SVM:
 	def initialize_svm(self):
 		self.load_all_models()
 		if self.index is None:
-			data = self.parser.load_data('../data/train.csv')
+			data = self.parser.load_data('data/train.csv')
 			data = self.parser.porter_stem_data(data)
 			self.data = data
 			index, index_map = self.parser.index_data(data)
@@ -114,12 +114,12 @@ class SVM:
 
 	def load_all_models(self):
 		for i in range(4):
-			filepath = '../data/svm/new_models/new_c_w{}.model1'.format(i+1)
+			filepath = 'data/svm/new_models/new_c_w{}.model1'.format(i+1)
 			model = self.read_model(filepath)
 			self.t_models.append(model)
 
 		for i in range(15):
-			filepath = '../data/svm/new_models/new_c_k{}.model0.1'.format(i+1)
+			filepath = 'data/svm/new_models/new_c_k{}.model0.1'.format(i+1)
 			model = self.read_model(filepath)
 			self.w_models.append(model)
 
