@@ -22,7 +22,7 @@ access_token = '1878195553-HTpislJVIvUrvH9RdferyT92bmYcLwlvEbrhpIc'
 access_secret = 'uYzyPFFHwrjjFKCiuLDn2nlaaQQcMnQfb3e6ajmHZUluk'
 
 total = 0
-file_count = 1
+file_count = 0
 class listener(StreamListener):
 	def on_data(self, data):
 		global total
@@ -34,16 +34,21 @@ class listener(StreamListener):
 			text = tweet["text"]
 			coordinates = tweet["coordinates"]
 			location = tweet["user"]["location"]
-			
 			if total % 1000 == 0:
 				print "Saved " + str(total) + " tweets"
 				file_count += 1
 			# make json in the order of time, text, location, coordinates
-			if location is not "" or 'null' not in coordinates:
+			if (location is not None and len(location.strip()) is not 0) or coordinates is not None:
 				total += 1
+				#if location is not None and len(location.strip()) is not 0:
+				#	print "location: " + location.encode('utf-8') 
+				#elif coordinates is not None or 'null' not in coordinates:
+				#	print "Have no location, but have the coordinates"
+				#else:
+				#	print "Somehow null location and coordinates passed through"
 				l = {'time': time, 'text': text, 'location': location, 'coordinates': coordinates}
 				saveThis = json.dumps(l)
-				saveFile = open('../data/twitDB_' + file_count + '.txt', 'a')
+				saveFile = open('../data/twitDB/twitDB_' + str(file_count) + '.txt', 'a')
 				saveFile.write(saveThis + "\n")
 				saveFile.close()
 			return True
