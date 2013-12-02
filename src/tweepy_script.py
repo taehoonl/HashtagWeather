@@ -39,7 +39,7 @@ class listener(StreamListener):
 			# make json in the order of time, text, location, coordinates
 			l = {'time': time, 'text': text, 'location': location, 'coordinates': coordinates}
 			saveThis = json.dumps(l)
-			saveFile = open('twitDB.txt', 'a')
+			saveFile = open('../data/twitDB.txt', 'a')
 			saveFile.write(saveThis + "\n")
 			saveFile.close()
 			return True
