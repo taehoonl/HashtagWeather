@@ -11,7 +11,7 @@ from svm import SVM
 from naivebayes import *
 
 # global 
-threshold = 0.9
+threshold = 0.5
 
 def svm_classify():
 	svm = SVM()
@@ -217,10 +217,11 @@ def bayes_classify():
 	'''
 	write object files for classifiers
 	'''
-	pickle_obj("time_nb.obj", time_nb)
-	pickle_obj("weather_nb.obj", weather_nb)
+	os.system('rm -r ../data/bayes_model/*')
+	pickle_obj("../data/bayes_model/time_nb.obj", time_nb)
+	pickle_obj("../data/bayes_model/weather_nb.obj", weather_nb)
 
-	abc = unpickle_obj("weather_nb.obj")
+	abc = unpickle_obj("../data/bayes_model/weather_nb.obj")
 	pdb.set_trace()	
 
 	'''

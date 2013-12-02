@@ -31,7 +31,14 @@ class NaiveBayes():
 			print "example should be of type str or list of str"
 		positive_score = self.score(e, True)
 		negative_score = self.score(e, False)
-		return -1.0*(positive_score - negative_score)#/ (abs(positive_score) + abs(negative_score))
+		if positive_score > negative_score:
+			return 1.0
+		return -1.0
+		# return positive_score
+		# result = -1.0*(positive_score - negative_score)#/ (abs(positive_score) + abs(negative_score))
+		# if result > 0:
+		# 	return math.log10(result)
+		# return -1.0
 
 	def score(self, example, positive):
 		py, px, tw = None, None, None
@@ -44,13 +51,13 @@ class NaiveBayes():
 			px = self.negative_x
 			tw = self.negative_sum
 
-		s = math.log(py)
-		# s = py
+		# s = math.log10(py)
+		s = py
 		for e in example:
 			if e in px:
-				# s *= float(px[e])/float(tw)
-				# s += math.log(float(px[e])/float(tw))
-				s += math.log(float(1+px[e]) / float(self.vocab_size+tw))
+				s *= float(px[e])/float(tw)
+				# s += math.log10(float(px[e])/float(tw))
+				# s += math.log10(float(1+px[e]) / float(self.vocab_size+tw))
 		return s
 
 class MultiNaiveBayes():

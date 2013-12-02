@@ -3,6 +3,7 @@ import pdb
 import numpy as np
 import math
 import json
+from pygeocoder import Geocoder
 
 class Query:
 
@@ -25,11 +26,14 @@ class Query:
 	def count(self):
 		return len(self.tweet_data), self.coordinates, self.locations
 
-	def get_lon_lat(self, somestring):
-		# call google API for lat, lon
-		lat = 45.0
-		lon = 45.0
-		return lon, lat
+	def get_lat_lon(self, str):
+		try:
+			results = Geocoder.geocode(str)
+			print results.coordinates
+			return results.coordinates[0], results.coordinates[1]
+		except:
+			print "geocode cannot find lat/lng for: " + str
+			return None, None
 
 	def distance(self, lat1, lon1, lat2, lon2):
 		return math.acos( (math.sin(lat1)*math.sin(lat2)) + (math.cos(lat1)*math.cos(lat2)*math.cos(lon1-lon2)) )*self.R
@@ -52,7 +56,9 @@ class Query:
 		elif not (tweet['location'].strip() == ''):
 			self.locations += 1
 			print 'locations : ', self.locations, tweet['location'].strip()
-			lon, lat = self.get_lon_lat(tweet['location'].strip()) # (in rad)
+			lat, lon = self.get_lat_lon(tweet['location'].strip()) # (in rad)
+			if lat is None and lon is None:
+				return
 			e[0] = math.radians(lat)
 			e[1] = math.radians(lon)
 			# e[2] = math.sin(lat)
@@ -73,7 +79,7 @@ class Query:
 			dist = self.distance(lat_rad, lon_rad, t[0], t[1])
 			# print t[0], t[1], dist
 			if dist <= radius:
-				matches.append(t)
+				matches.append(t[2])
 		return matches
 
 	def query_address(self, address, radius):
@@ -82,6 +88,6 @@ class Query:
 
 
 if __name__ == '__main__':
-	query = Query('../twitDB.txt')
+	query = Query('../data/twitDB/twitDB-short.txt')
 	pdb.set_trace()
 	print 'done'
