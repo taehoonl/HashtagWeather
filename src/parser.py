@@ -1,4 +1,4 @@
-import os
+import os, pickle
 import pdb
 
 import pandas as p
@@ -144,6 +144,16 @@ class Parser:
 
 		return result
 
+	def pickle_data_to_file(self, data, filename):
+		f = open('{}.data'.format(filename), 'w')
+		pickle.dump(data, f)
+		return
+
+	def load_pickled_data(self, filename):
+		f = open(filename, 'r')
+		data = pickle.load(f)
+		return data
+
 
 	def svmlight_format_to_file(self, data, index, index_map, segment=False, segment_size=1000):
 		svmlight_temporal_data = ['']*4
@@ -226,10 +236,14 @@ class Parser:
 # parser = Parser()
 # data = parser.load_data('../data/train.csv')
 # data = parser.porter_stem_data(data)
+# index, index_map = parser.index_data(data)
+# parser.pickle_data_to_file(index, 'data.index')
+# parser.pickle_data_to_file(index_map, 'data.map')
+# pdb.set_trace()
 # pos, neg = parser.get_label_divided_data(data, 'w1')
 # pos_index, idx_map = parser.labeled_index_data(data, pos)
 # pdb.set_trace()
-# index, index_map = parser.index_data(data)
+
 # svm_data = parser.svmlight_format_to_file(data, index, index_map)
 # svm_data = parser.svmlight_format_to_file(data, index, index_map, segment=True, segment_size=10000)
 
