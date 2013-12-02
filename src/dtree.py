@@ -24,7 +24,7 @@ class Node:
 		if self.parser is None:
 			self.parser = Parser()
 		if not tweet_cleaned:
-			tweet = self.parser.stem_sentence_porter(tweet)
+			# tweet = self.parser.stem_sentence_porter(tweet)
 			tweet_cleaned = True
 		if self.criterion:
 			print self.criterion
@@ -54,6 +54,14 @@ class DecisionTree:
 		if self.root is None:
 			self.root = root
 
+		if depth == max_depth:
+			if len(pos_data) > len(neg_data):
+				root.label = 1
+				return root
+			else:
+				root.label = -1
+				return root
+
 		if len(pos_data) == 0:
 			root.label = -1
 			return root
@@ -75,8 +83,8 @@ class DecisionTree:
 			print 'Contains: {}, {}'.format(cps, cns)
 			print 'Not Contains: {}, {}'.format(ncps, ncns)
 
-		root.left = self.create_decision_tree_for_k(ncps, ncns, depth+1, attr)
-		root.right = self.create_decision_tree_for_k(cps, cns, depth+1, attr)
+		root.left = self.create_decision_tree_for_k(ncps, ncns, depth+1, attr, max_depth=max_depth)
+		root.right = self.create_decision_tree_for_k(cps, cns, depth+1, attr, max_depth=max_depth)
 		return root
 
 	def entropy(self, pos_data, neg_data):
@@ -167,42 +175,37 @@ class DecisionTree:
 		accuracy = float(correct)/(correct+wrong)
 		print "Accuracy of tree is: {}".format(accuracy)
 
-tree = DecisionTree()
-data = tree.parser.load_data('../data/train_tree.csv')
-data = tree.parser.porter_stem_data(data)
-index, index_map = tree.parser.index_data(data)
-keys = index.keys()
-for key in keys:
-	if index[key] == 1:
-		keys.remove(key)
-	try:
-		number = int(key)
-		keys.remove(key)
-	except:
-		pass
-tree.keys = keys
-pos_data, neg_data = tree.parser.get_label_divided_data(data, 'k1')
-dt1 = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1') # no max depth
-valdata = tree.parser.load_data('../data/val.csv')
-valdata = tree.parser.porter_stem_data(data)
-pos_val, neg_val = tree.parser.get_label_divided_data(data, 'k1')
-tree.validate(dt1, pos_val, neg_val)
-pdb.set_trace()
-# dt2 = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1')
-# dt3 = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1')
-# for i in range(4)
-# 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'w{}'.format(i+1))
-# 	dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='w{}'.format(i+1))
-# 	filename = 'dt_w{}.tree'.format(i+1)
-# 	f = open(filename, 'w')
-# 	pickle.dump(dt, f)
-# for i in range(15)
+	def load_tree(self, filename):
+		f = open(filename, 'r')
+		dt = pickle.load(f)
+		return dt
+
+# tree = DecisionTree()
+# data = tree.parser.load_data('../data/train_tree.csv')
+# data = tree.parser.porter_stem_data(data)
+# index, index_map = tree.parser.index_data(data)
+# keys = index.keys()
+# for key in keys:
+# 	if index[key] == 1:
+# 		keys.remove(key)
+# 	try:
+# 		number = int(key)
+# 		keys.remove(key)
+# 	except:
+# 		pass
+# tree.keys = keys
+# # for i in range(4):
+# # 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'w{}'.format(i+1))
+# # 	dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='w{}'.format(i+1), max_depth=15)
+# # 	filename = 'dt_w{}.tree'.format(i+1)
+# # 	f = open(filename, 'w')
+# # 	pickle.dump(dt, f)
+# for i in range(12,15):
 # 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'k{}'.format(i+1))
-# 	dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k{}'.format(i+1))
+# 	dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k{}'.format(i+1), max_depth=15)
 # 	filename = 'dt_k{}.tree'.format(i+1)
 # 	f = open(filename, 'w')
 # 	pickle.dump(dt, f)
-# write the tree to file
-pdb.set_trace()
+# pdb.set_trace()
 
 
