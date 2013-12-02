@@ -27,11 +27,12 @@ class Node:
 			tweet = self.parser.stem_sentence_porter(tweet)
 			tweet_cleaned = True
 		if self.criterion:
+			print self.criterion
 			if self.criterion in tweet:
 				# if has, go right, else left
-				return self.left.get_label(tweet, tweet_cleaned)
-			else:
 				return self.right.get_label(tweet, tweet_cleaned)
+			else:
+				return self.left.get_label(tweet, tweet_cleaned)
 		return self.label
 
 class DecisionTree:
@@ -41,7 +42,7 @@ class DecisionTree:
 		self.keys = None
 		self.parser = Parser()
 
-	def create_decision_tree_for_k(self, pos_data, neg_data, depth, attr, words_used):
+	def create_decision_tree_for_k(self, pos_data, neg_data, depth, attr, max_depth=None):
 		'''
 		Trains and returns a decision tree with the information gain
 		as the tree splitting criterion. Criterion is a binary function
@@ -61,7 +62,7 @@ class DecisionTree:
 			return root
 
 		print 'Current depth: {}'.format(depth)
-		criterion_word, words_used = self.max_gain(pos_data, neg_data, words_used)
+		criterion_word = self.max_gain(pos_data, neg_data)
 		root.criterion = criterion_word
 
 		# cps = set positive tweets that contain the word
@@ -70,8 +71,12 @@ class DecisionTree:
 		# ncns = set negative tweets that do not contain the word
 		cps, ncps, cns, ncns = self.split_on_word(pos_data, neg_data, criterion_word)
 
-		root.left = self.create_decision_tree_for_k(ncps, ncns, depth+1, attr, words_used)
-		root.right = self.create_decision_tree_for_k(cps, cns, depth+1, attr, words_used)
+		if criterion_word == 'rain':
+			print 'Contains: {}, {}'.format(cps, cns)
+			print 'Not Contains: {}, {}'.format(ncps, ncns)
+
+		root.left = self.create_decision_tree_for_k(ncps, ncns, depth+1, attr)
+		root.right = self.create_decision_tree_for_k(cps, cns, depth+1, attr)
 		return root
 
 	def entropy(self, pos_data, neg_data):
@@ -113,22 +118,16 @@ class DecisionTree:
 		return set_entropy-subset_entropy
 
 
-	def max_gain(self, pos_data, neg_data, words_used):
+	def max_gain(self, pos_data, neg_data):
 		max_gain = 0
 		max_word = None
 		count = 0
 		for key in self.keys:
-			# print 'Trying key: {}'.format(key)
-			if key not in words_used:
-				gain = self.gain(pos_data, neg_data, key)
-				if gain > max_gain:
-					max_gain = gain
-					max_word = key
-				if count%100 == 0:
-					print count
-				count += 1
-		words_used.append(max_word)
-		return max_word, words_used
+			gain = self.gain(pos_data, neg_data, key)
+			if gain > max_gain:
+				max_gain = gain
+				max_word = key
+		return max_word
 
 	def split_on_word(self, pos_data, neg_data, word):
 		contains_pos_set = []
@@ -148,8 +147,28 @@ class DecisionTree:
 				not_contains_neg_set.append(neg_data[i])
 		return contains_pos_set, not_contains_pos_set, contains_neg_set, not_contains_neg_set
 
+	def validate(self, tree, pos_data, neg_data):
+		correct = 0
+		wrong = 0
+		for datum in pos_data:
+			tweet = datum[1]
+			label = tree.get_label(tweet, tweet_cleaned=True)
+			if label == 1:
+				correct += 1
+			else:
+				wrong += 1
+		for datum in neg_data:
+			tweet = datum[1]
+			label = tree.get_label(tweet, tweet_cleaned=True)
+			if label == 1:
+				wrong += 1
+			else:
+				correct += 1
+		accuracy = float(correct)/(correct+wrong)
+		print "Accuracy of tree is: {}".format(accuracy)
+
 tree = DecisionTree()
-data = tree.parser.load_data('../data/train.csv')
+data = tree.parser.load_data('../data/train_tree.csv')
 data = tree.parser.porter_stem_data(data)
 index, index_map = tree.parser.index_data(data)
 keys = index.keys()
@@ -163,9 +182,26 @@ for key in keys:
 		pass
 tree.keys = keys
 pos_data, neg_data = tree.parser.get_label_divided_data(data, 'k1')
-dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1', words_used=[])
-tweet = "its a sunny day today!"
-label = dt.get_label(tweet)
+dt1 = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1') # no max depth
+valdata = tree.parser.load_data('../data/val.csv')
+valdata = tree.parser.porter_stem_data(data)
+pos_val, neg_val = tree.parser.get_label_divided_data(data, 'k1')
+tree.validate(dt1, pos_val, neg_val)
+pdb.set_trace()
+# dt2 = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1')
+# dt3 = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k1')
+# for i in range(4)
+# 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'w{}'.format(i+1))
+# 	dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='w{}'.format(i+1))
+# 	filename = 'dt_w{}.tree'.format(i+1)
+# 	f = open(filename, 'w')
+# 	pickle.dump(dt, f)
+# for i in range(15)
+# 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'k{}'.format(i+1))
+# 	dt = tree.create_decision_tree_for_k(pos_data, neg_data, depth=1, attr='k{}'.format(i+1))
+# 	filename = 'dt_k{}.tree'.format(i+1)
+# 	f = open(filename, 'w')
+# 	pickle.dump(dt, f)
 # write the tree to file
 pdb.set_trace()
 
