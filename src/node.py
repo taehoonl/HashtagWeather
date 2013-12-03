@@ -21,10 +21,9 @@ class Node:
 		if self.parser is None:
 			self.parser = Parser()
 		if not tweet_cleaned:
-			# tweet = self.parser.stem_sentence_porter(tweet)
+			tweet = self.parser.stem_sentence_porter(tweet)
 			tweet_cleaned = True
 		if self.criterion:
-			print self.criterion
 			if self.criterion in tweet:
 				# if has, go right, else left
 				return self.right.get_label(tweet, tweet_cleaned)

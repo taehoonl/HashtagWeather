@@ -21,10 +21,10 @@ class DecisionTree:
 
 	def initialize_dt(self):
 		for i in range(15):
-			rel_path = '../data/decision_tree/dt_k{}.tree'.format(i+1)
+			rel_path = 'data/decision_tree/dt_k{}.tree'.format(i+1)
 			self.w_trees.append(self.load_tree(rel_path))
 		for i in range(4):
-			rel_path = '../data/decision_tree/dt_w{}.tree'.format(i+1)
+			rel_path = 'data/decision_tree/dt_w{}.tree'.format(i+1)
 			self.t_trees.append(self.load_tree(rel_path))
 
 	def classify_tweet(self, tweet):
