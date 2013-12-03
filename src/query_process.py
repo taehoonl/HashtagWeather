@@ -12,4 +12,3 @@ for filename in os.listdir('../data/twitDB'):
 		query.save_data(aggregated_file)
 
 query.read_data(aggregated_file)
-pdb.set_trace()

@@ -26,11 +26,11 @@ class SVM:
 		if cwd[len(cwd)-1] == 'src':
 			index_file_path = '../data/svm/data.index'
 			map_file_path = '../data/svm/data.map'
-			models_file_path = '../data/svm/new_models/'
+			models_file_path = '../data/svm/models/'
 		else:
 			index_file_path = 'data/svm/data.index'
 			map_file_path = 'data/svm/data.map'
-			models_file_path = 'data/svm/new_models/'
+			models_file_path = 'data/svm/models/'
 		self.load_all_models(models_file_path)
 		if self.index is None:
 			index = self.parser.load_pickled_data(index_file_path)
@@ -138,11 +138,14 @@ class SVM:
 		weather_tweets = []
 		if not isinstance(tweets, list):
 			tweets = [tweets]
+		count = 0
 		for tweet in tweets:
+			count += 1
 			formatted_tweet = self.parser.stem_sentence_porter(tweet)
 			formatted_tweet = self.format_tweet_for_svmlight(formatted_tweet)
 			c = svmlight.classify(self.is_weather_model, formatted_tweet)
-			print c
+			if count%100 == 0:
+				print count
 			if c[0] < 0:
 				weather_tweets.append(tweet)
 		return weather_tweets
