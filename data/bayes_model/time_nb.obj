@@ -1,4 +1,4 @@
-(inaivebayes
+(isrc.naivebayes
 MultiNaiveBayes
 p0
 (dp1
@@ -7,7 +7,7 @@ p2
 (dp3
 S'w4'
 p4
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p5
 (dp6
@@ -52343,7 +52343,7 @@ p17432
 F921.0
 sS'parser'
 p17433
-(iparser
+(isrc.parser
 Parser
 p17434
 (dp17435
@@ -52470,7 +52470,7 @@ p17492
 F12864.0
 sbsS'w3'
 p17493
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p17494
 (dp17495
@@ -91606,7 +91606,7 @@ I1
 ssg17432
 F1683.0
 sg17433
-(iparser
+(isrc.parser
 Parser
 p20381
 (dp20382
@@ -91674,7 +91674,7 @@ sg17492
 F18695.0
 sbsS'w2'
 p20387
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p20388
 (dp20389
@@ -129777,7 +129777,7 @@ I2
 ssg17432
 F1506.0
 sg17433
-(iparser
+(isrc.parser
 Parser
 p22866
 (dp22867
@@ -129845,7 +129845,7 @@ sg17492
 F18777.0
 sbsS'w1'
 p22872
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p22873
 (dp22874
@@ -168988,7 +168988,7 @@ I1
 ssg17432
 F14276.0
 sg17433
-(iparser
+(isrc.parser
 Parser
 p23071
 (dp23072

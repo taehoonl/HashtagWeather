@@ -1,4 +1,4 @@
-(inaivebayes
+(isrc.naivebayes
 MultiNaiveBayes
 p0
 (dp1
@@ -7,7 +7,7 @@ p2
 (dp3
 S'k13'
 p4
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p5
 (dp6
@@ -54325,7 +54325,7 @@ p18090
 F2374.0
 sS'parser'
 p18091
-(iparser
+(isrc.parser
 Parser
 p18092
 (dp18093
@@ -54452,7 +54452,7 @@ p18150
 F26883.0
 sbsS'k12'
 p18151
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p18152
 (dp18153
@@ -94207,7 +94207,7 @@ I1
 ssg18090
 F2545.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p21178
 (dp21179
@@ -94275,7 +94275,7 @@ sg18150
 F30393.0
 sbsS'k11'
 p21184
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p21185
 (dp21186
@@ -129296,7 +129296,7 @@ I1
 ssg18090
 F620.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p22691
 (dp22692
@@ -129364,7 +129364,7 @@ sg18150
 F7409.0
 sbsS'k10'
 p22697
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p22698
 (dp22699
@@ -167323,7 +167323,7 @@ I1
 ssg18090
 F1698.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p24862
 (dp24863
@@ -167391,7 +167391,7 @@ sg18150
 F21158.0
 sbsS'k15'
 p24868
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p24869
 (dp24870
@@ -202267,7 +202267,7 @@ I1
 ssg18090
 F701.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p26204
 (dp26205
@@ -202335,7 +202335,7 @@ sg18150
 F9647.0
 sbsS'k14'
 p26210
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p26211
 (dp26212
@@ -235346,7 +235346,7 @@ I1
 ssg18090
 F271.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p27025
 (dp27026
@@ -235414,7 +235414,7 @@ sg18150
 F3760.0
 sbsS'k3'
 p27031
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p27032
 (dp27033
@@ -266499,7 +266499,7 @@ I1
 ssg18090
 F48.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p27312
 (dp27313
@@ -266567,7 +266567,7 @@ sg18150
 F558.0
 sbsS'k2'
 p27318
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p27319
 (dp27320
@@ -302901,7 +302901,7 @@ I1
 ssg18090
 F1513.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p28994
 (dp28995
@@ -302969,7 +302969,7 @@ sg18150
 F16307.0
 sbsS'k1'
 p29000
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p29001
 (dp29002
@@ -335700,7 +335700,7 @@ I1
 ssg18090
 F259.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p29653
 (dp29654
@@ -335768,7 +335768,7 @@ sg18150
 F3544.0
 sbsS'k7'
 p29659
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p29660
 (dp29661
@@ -376340,7 +376340,7 @@ I3
 ssg18090
 F4065.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p32103
 (dp32104
@@ -376408,7 +376408,7 @@ sg18150
 F44215.0
 sbsS'k6'
 p32109
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p32110
 (dp32111
@@ -406984,7 +406984,7 @@ I1
 ssg18090
 F19.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p32231
 (dp32232
@@ -407052,7 +407052,7 @@ sg18150
 F229.0
 sbsS'k5'
 p32237
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p32238
 (dp32239
@@ -440281,7 +440281,7 @@ I1
 ssg18090
 F421.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p33050
 (dp33051
@@ -440349,7 +440349,7 @@ sg18150
 F5787.0
 sbsS'k4'
 p33056
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p33057
 (dp33058
@@ -476649,7 +476649,7 @@ I1
 ssg18090
 F1722.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p34476
 (dp34477
@@ -476717,7 +476717,7 @@ sg18150
 F19150.0
 sbsS'k9'
 p34482
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p34483
 (dp34484
@@ -509178,7 +509178,7 @@ I1
 ssg18090
 F155.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p35131
 (dp35132
@@ -509246,7 +509246,7 @@ sg18150
 F2056.0
 sbsS'k8'
 p35137
-(inaivebayes
+(isrc.naivebayes
 NaiveBayes
 p35138
 (dp35139
@@ -539890,7 +539890,7 @@ I1
 ssg18090
 F23.0
 sg18091
-(iparser
+(isrc.parser
 Parser
 p35255
 (dp35256
