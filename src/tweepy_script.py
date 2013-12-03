@@ -3,6 +3,8 @@ from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 import json
 from pprint import pprint
+import time
+import os
 
 """Code to stream the tweets live from the web.
 The following library was used - tweepy - accessible from 
@@ -22,7 +24,7 @@ access_token = '1878195553-HTpislJVIvUrvH9RdferyT92bmYcLwlvEbrhpIc'
 access_secret = 'uYzyPFFHwrjjFKCiuLDn2nlaaQQcMnQfb3e6ajmHZUluk'
 
 total = 0
-file_count = 0
+file_count = 1
 class listener(StreamListener):
 	def on_data(self, data):
 		global total
@@ -30,13 +32,11 @@ class listener(StreamListener):
 		try:
 			tweet = json.loads(data)
 			#pprint (tweet)
-			time = tweet["created_at"]
+			timestamp = tweet["created_at"]
 			text = tweet["text"]
 			coordinates = tweet["coordinates"]
 			location = tweet["user"]["location"]
-			if total % 1000 == 0:
-				print "Saved " + str(total) + " tweets"
-				file_count += 1
+			
 			# make json in the order of time, text, location, coordinates
 			if (location is not None and len(location.strip()) is not 0) or coordinates is not None:
 				total += 1
@@ -46,9 +46,15 @@ class listener(StreamListener):
 				#	print "Have no location, but have the coordinates"
 				#else:
 				#	print "Somehow null location and coordinates passed through"
-				l = {'time': time, 'text': text, 'location': location, 'coordinates': coordinates}
+				if total % 1000 == 0:
+					print "Saved " + str(total) + " tweets"
+					file_count += 1
+				l = {'time': timestamp, 'text': text, 'location': location, 'coordinates': coordinates}
 				saveThis = json.dumps(l)
-				saveFile = open('../data/twitDB/twitDB_' + str(file_count) + '.txt', 'a')
+				path = "../data/twitDB_"+time.strftime("%m-%d-%Y")
+				if not os.path.isdir(path):
+					os.makedirs(path)
+				saveFile = open(path+'/twitDB_' + str(file_count) + '.txt', 'a')
 				saveFile.write(saveThis + "\n")
 				saveFile.close()
 			return True
