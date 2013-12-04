@@ -13,7 +13,7 @@ class Query:
 		self.coordinates = 0
 		self.locations = 0
 		# tweet_data entry = [latitude, longitude, tweet]
-		self.entry_length = 3 # 
+		self.entry_length = 3 #
 		self.tweet_data = []
 
 	def process_file(self, data_path):
@@ -49,6 +49,7 @@ class Query:
 		return len(self.tweet_data), self.coordinates, self.locations
 
 	def get_lat_lon(self, str):
+<<<<<<< HEAD
 		try:
 			results = [45.0,45.0]
 			return results[0], results[1]
@@ -57,6 +58,16 @@ class Query:
 		except Exception,e: 
 			print e
 			return None, None
+=======
+		return 45.0, 45.0
+		# try:
+		# 	results = Geocoder.geocode(str)
+		# 	print results.coordinates
+		# 	return results.coordinates[0], results.coordinates[1]
+		# except Exception,e:
+		# 	print e
+		# 	return None, None
+>>>>>>> 7a73b051ff450ea73a8ebfd13067702e445dfe70
 
 	def distance(self, lat1, lon1, lat2, lon2):
 		return math.acos( (math.sin(lat1)*math.sin(lat2)) + (math.cos(lat1)*math.cos(lat2)*math.cos(lon1-lon2)) )*self.R
@@ -65,7 +76,7 @@ class Query:
 
 		e = [None] * self.entry_length
 
-		# coordinate 
+		# coordinate
 		if not (tweet['coordinates'] == None):
 			self.coordinates += 1
 			print 'coordinates : ', self.coordinates, tweet['coordinates']['coordinates']
@@ -100,7 +111,6 @@ class Query:
 
 		for t in self.tweet_data:
 			dist = self.distance(lat_rad, lon_rad, t[0], t[1])
-			# print t[0], t[1], dist
 			if dist <= radius:
 				matches.append(t[2])
 		return matches

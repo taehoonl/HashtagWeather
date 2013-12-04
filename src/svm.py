@@ -13,10 +13,46 @@ class SVM:
 		self.parser = Parser()
 		self.weather_models = []
 		self.time_models = []
+		self.is_weather_model = None
 		self.default_data_features = []
 		self.data = None
 		self.index = None
 		self.index_map = None
+
+	def initialize_svm(self):
+		# get file path, depending on the location from which the class is called
+		cwd = os.getcwd()
+		cwd = cwd.split('/')
+		if cwd[len(cwd)-1] == 'src':
+			index_file_path = '../data/svm/data.index'
+			map_file_path = '../data/svm/data.map'
+			models_file_path = '../data/svm/models/'
+		else:
+			index_file_path = 'data/svm/data.index'
+			map_file_path = 'data/svm/data.map'
+			models_file_path = 'data/svm/models/'
+		self.load_all_models(models_file_path)
+		if self.index is None:
+			index = self.parser.load_pickled_data(index_file_path)
+			index_map = self.parser.load_pickled_data(map_file_path)
+			self.index = index
+			self.index_map = index_map
+
+	def load_all_models(self, path):
+
+		filepath = path + 's5.model0.01'
+		model = self.read_model(filepath)
+		self.is_weather_model = model
+
+		for i in range(4):
+			filepath = path + 'new_c_w{}.model1'.format(i+1)
+			model = self.read_model(filepath)
+			self.time_models.append(model)
+
+		for i in range(15):
+			filepath = path + 'new_c_k{}.model0.1'.format(i+1)
+			model = self.read_model(filepath)
+			self.weather_models.append(model)
 
 	def load_data(self, rel_path):
 		'''
@@ -73,7 +109,6 @@ class SVM:
 		return formatted_data
 
 	def format_tweet_for_svmlight(self, tweet):
-		# data_features = self.default_data_features[:]
 		data_features = []
 		word_dict = {}
 		for word in tweet:
@@ -89,37 +124,35 @@ class SVM:
 				pass
 		return [(1, data_features)]
 
-	def train(self, data, t=0, C=1.0):
-		model = svmlight.learn(data, type="classifier", t=t, C=C)
-		return model
-
-	def classify(self, model, data):
-		classifications = svmlight.classify(model, data)
-		return classifications
 
 	def read_model(self, rel_path):
 		abs_path = os.path.abspath(rel_path)
 		model = svmlight.read_model(abs_path)
 		return model
 
-	def initialize_svm(self):
-		self.load_all_models()
-		if self.index is None:
-			index = self.parser.load_pickled_data('data/svm/data.index')
-			index_map = self.parser.load_pickled_data('data/svm/data.map')
-			self.index = index
-			self.index_map = index_map
+	def train(self, data, t=0, C=1.0):
+		model = svmlight.learn(data, type="classifier", t=t, C=C)
+		return model
 
-	def load_all_models(self):
-		for i in range(4):
-			filepath = 'data/svm/new_models/new_c_w{}.model1'.format(i+1)
-			model = self.read_model(filepath)
-			self.time_models.append(model)
+	def get_weather_tweets(self, tweets):
+		weather_tweets = []
+		if not isinstance(tweets, list):
+			tweets = [tweets]
+		count = 0
+		for tweet in tweets:
+			count += 1
+			formatted_tweet = self.parser.stem_sentence_porter(tweet)
+			formatted_tweet = self.format_tweet_for_svmlight(formatted_tweet)
+			c = svmlight.classify(self.is_weather_model, formatted_tweet)
+			if count%100 == 0:
+				print count
+			if c[0] < 0:
+				weather_tweets.append(tweet)
+		return weather_tweets
 
-		for i in range(15):
-			filepath = 'data/svm/new_models/new_c_k{}.model0.1'.format(i+1)
-			model = self.read_model(filepath)
-			self.weather_models.append(model)
+	def classify(self, model, data):
+		classifications = svmlight.classify(model, data)
+		return classifications
 
 	def classify_tweet(self, tweet):
 		try:

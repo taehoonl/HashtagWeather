@@ -8,9 +8,9 @@ import svmlight_loader as svml
 
 from parser import Parser
 from svm import SVM
-from naivebayes import *
+from naivebayes import MultiNaiveBayes, NaiveBayes
 
-# global 
+# global
 threshold = 0.5
 
 def svm_classify():
@@ -146,24 +146,24 @@ def bayes_classify():
 	# print "finished training for w[1-4] naive bayes classifier"
 
 	# classify temporal
-	tweets = validation_data['tweet']
-	for t in tweets:
-		# w = time_nb.classify(t)
-		# w_sorted = sorted(w, key=lambda (a,b): b)
-		# top, dontcare = w_sorted[3]
-		top = time_nb.classify_top(t)
-		temporal_classifications.append(top)
+	# tweets = validation_data['tweet']
+	# for t in tweets:
+	# 	# w = time_nb.classify(t)
+	# 	# w_sorted = sorted(w, key=lambda (a,b): b)
+	# 	# top, dontcare = w_sorted[3]
+	# 	top = time_nb.classify_top(t)
+	# 	temporal_classifications.append(top)
 
 	# accuracy (binary approach = 0.59)
-	correct = 0
-	total = 0
-	for i in range(len(temporal_classifications)):
-		total += 1
-		if temporal_classifications[i] == temporal_labels[i]:
-			correct += 1
-	print "threshold : {}".format(threshold)
-	print "time accurracy : " + str(float(correct)/float(total))
-	# pdb.set_trace()
+	# correct = 0
+	# total = 0
+	# for i in range(len(temporal_classifications)):
+	# 	total += 1
+	# 	if temporal_classifications[i] == temporal_labels[i]:
+	# 		correct += 1
+	# print "threshold : {}".format(threshold)
+	# print "time accurracy : " + str(float(correct)/float(total))
+	pdb.set_trace()
 
 	weather_positive_ys = []
 	weather_negative_ys = []
@@ -182,7 +182,7 @@ def bayes_classify():
 
 	weather_nb = MultiNaiveBayes(weather_label_keys, vocab_size, weather_positive_ys, weather_negative_ys, weather_positive_xs, weather_negative_xs)
 	# print "finished training for k[1-15] naive bayes classifier"
-
+	pdb.set_trace()
 	# classify weather
 	tweets = validation_data['tweet']
 	for t in tweets:
@@ -222,7 +222,7 @@ def bayes_classify():
 	pickle_obj("../data/bayes_model/weather_nb.obj", weather_nb)
 
 	abc = unpickle_obj("../data/bayes_model/weather_nb.obj")
-	pdb.set_trace()	
+	pdb.set_trace()
 
 	'''
 	using MultinomialNaiveBayes

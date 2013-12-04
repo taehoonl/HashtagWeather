@@ -5,7 +5,7 @@ import numpy as np
 import svmlight_loader as svml
 from parser import Parser
 
-class NaiveBayes():
+class NaiveBayes:
 
 	def __init__(self, feature, vocab_size, positive_y, negative_y, positive_x, negative_x):
 		self.parser = Parser()
@@ -50,7 +50,6 @@ class NaiveBayes():
 			py = self.negative_y / self.total
 			px = self.negative_x
 			tw = self.negative_sum
-
 		# s = math.log10(py)
 		s = py
 		for e in example:
@@ -60,7 +59,7 @@ class NaiveBayes():
 				# s += math.log10(float(1+px[e]) / float(self.vocab_size+tw))
 		return s
 
-class MultiNaiveBayes():
+class MultiNaiveBayes:
 
 	def __init__(self, features, vocab_size, positive_ys, negative_ys, positive_xs, negative_xs):
 		self.features = features
@@ -94,37 +93,6 @@ class MultiNaiveBayes():
 				result[i] = 1
 		return result
 
-# class MultinomialNaiveBayes():
-
-# 	def __init__(self, features, vocab_size, ys, xs):
-# 		self.vocab_size = vocab_size
-# 		self.features = features
-# 		self.total = 0
-# 		self.y_length = {}
-# 		self.x_length = {}
-# 		self.xs = xs
-# 		self.ys = ys
-# 		for f in features:
-# 			self.x_length[f] = float(sum(xs[f].values()))
-# 			self.y_length[f] = float(len(ys[f]))
-# 			self.total += self.y_length[f]
-
-# 	def classify(self, example):
-# 		result = []
-# 		for f in self.features:
-# 			py = self.y_length[f] / self.total
-# 			tw = self.x_length[f]
-# 			px = self.xs[f]
-# 			s = self.score(example, px, py, tw)
-# 			result.append((f, s))
-# 		return result
-
-# 	def score(self, example, px, py, tw):
-# 		s = math.log(py)
-# 		for e in example:
-# 			if e in px:
-# 				s += math.log(float(1+px[e]) / float(self.vocab_size+tw))
-# 		return s
 
 
 
