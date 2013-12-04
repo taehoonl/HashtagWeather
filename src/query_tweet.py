@@ -49,6 +49,16 @@ class Query:
 		return len(self.tweet_data), self.coordinates, self.locations
 
 	def get_lat_lon(self, str):
+<<<<<<< HEAD
+		try:
+			results = [45.0,45.0]
+			return results[0], results[1]
+			# results = Geocoder.geocode(str)
+			# return results.coordinates[0], results.coordinates[1]
+		except Exception,e: 
+			print e
+			return None, None
+=======
 		return 45.0, 45.0
 		# try:
 		# 	results = Geocoder.geocode(str)
@@ -57,6 +67,7 @@ class Query:
 		# except Exception,e:
 		# 	print e
 		# 	return None, None
+>>>>>>> 7a73b051ff450ea73a8ebfd13067702e445dfe70
 
 	def distance(self, lat1, lon1, lat2, lon2):
 		return math.acos( (math.sin(lat1)*math.sin(lat2)) + (math.cos(lat1)*math.cos(lat2)*math.cos(lon1-lon2)) )*self.R
