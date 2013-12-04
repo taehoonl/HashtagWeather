@@ -50,9 +50,10 @@ class Query:
 
 	def get_lat_lon(self, str):
 		try:
-			results = Geocoder.geocode(str)
-			print results.coordinates
-			return results.coordinates[0], results.coordinates[1]
+			results = [45.0,45.0]
+			return results[0], results[1]
+			# results = Geocoder.geocode(str)
+			# return results.coordinates[0], results.coordinates[1]
 		except Exception,e: 
 			print e
 			return None, None
@@ -107,9 +108,3 @@ class Query:
 	def query_address(self, address, radius):
 		lon, lat = self.get_lon_lat(address)
 		return self.query_coord(lon, lat, radius)
-
-
-if __name__ == '__main__':
-	query = Query('../data/twitDB/twitDB.txt')
-	pdb.set_trace()
-	print 'done'
