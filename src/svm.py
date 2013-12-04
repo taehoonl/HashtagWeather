@@ -50,7 +50,8 @@ class SVM:
 			self.time_models.append(model)
 
 		for i in range(15):
-			filepath = path + 'new_c_k{}.model0.1'.format(i+1)
+			# filepath = path + 'new_c_k{}.model0.1'.format(i+1)
+			filepath = path + 'k{}.model0.1'.format(i+1)
 			model = self.read_model(filepath)
 			self.weather_models.append(model)
 

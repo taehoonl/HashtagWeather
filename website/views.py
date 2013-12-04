@@ -1,10 +1,10 @@
 import pdb
 from collections import Counter
+from random import shuffle, randint
 
 from django.template.context import RequestContext
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-# from django.views.generic import FormView
 
 from website.forms import TweetForm
 from src.query_tweet import Query
@@ -16,8 +16,28 @@ class Views:
 	def __init__(self):
 		self.classifier = Classifiers()
 		self.classifier.initialize()
+		self.cur_tweets = {}
 
 	def home(self, request):
+		form = TweetForm()
+		context = {}
+		context['bg_num'] = randint(1,4)
+		context['form'] = form
+
+		return render_to_response('home.html',
+			context_instance = RequestContext(request, context))
+
+	def about(self, request):
+		context = {}
+		return render_to_response('about.html',
+			context_instance = RequestContext(request, context))
+
+	def algorithms(self, request):
+		context = {}
+		return render_to_response('algorithms.html',
+			context_instance = RequestContext(request, context))
+
+	def weather(self, request):
 
 		form = TweetForm()
 		context = {}
@@ -34,20 +54,25 @@ class Views:
 
 					tweets = self.get_relevant_tweets(lat, lng)
 					code, label1, label2 = self.classify_many_tweets(classifier, tweets)
-					context['location'] = forecast['location']['city']
+					context['city'] = forecast['location']['city']
+					context['region'] = forecast['location']['region']
 					context['actual_condition'] = forecast['condition']['text']
 					context['temp'] = forecast['condition']['temp']
 					context['tweet_conditions'] = [label1, label2]
 					context['tweet_code'] = 'G'
-
+					shuffle(self.cur_tweets[label1])
+					shuffle(self.cur_tweets[label2])
+					context['label1_tweets'] = self.cur_tweets[label1][:5]
+					context['label2_tweets'] = self.cur_tweets[label2][:5]
 				else:
+					context['error'] = 'Please input a location of the format <City>, <State> or <Zipcode>.'
 					form = TweetForm()
 			except:
 				form = TweetForm()
 
 		context['form'] = form
 
-		return render_to_response('home.html',
+		return render_to_response('weather.html',
 			context_instance = RequestContext(request, context))
 
 	def forecast(self, lat, lng, form):
@@ -57,6 +82,7 @@ class Views:
 
 	def get_relevant_tweets(self, lat, lng, rad=15):
 		tweets = self.classifier.tweet_querier.query_coord(lng, lat, rad)
+		tweets = self.classifier.svm.get_weather_tweets(tweets)
 		return tweets
 
 	def classify_many_tweets(self, classifier, tweets):
@@ -64,14 +90,18 @@ class Views:
 		condition_list = []
 		code_list = []
 		print 'Classifying tweets with {}........'.format(classifier)
+		self.cur_tweets = {}
 		for tweet in tweets:
 			code, conditions = self.classify(classifier, tweet)
 			for condition in conditions:
+				print condition
 				if condition != "I can't tell":
 					try:
 						condition_map[condition] += 1
+						self.cur_tweets[condition].append(tweet)
 					except:
 						condition_map[condition] = 1
+						self.cur_tweets[condition] = [tweet]
 
 		keys = condition_map.keys()
 		for key in keys:

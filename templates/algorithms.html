@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block styles %}<link rel="stylesheet" type="text/css" href="{% static "css/weather.css" %}">{% endblock %}
+
+{% block title %}# WEATHER{% endblock %}
+
+{% block content %}
+
+
+	{% include "nav.html" %}
+
+	<div id="about">
+	<h1>algorithms</h1>
+
+	<h2>SVM</h2>
+	<p>SVM info</p>
+
+	<h2>Decision Tree</h2>
+	<p>Decision tree info</p>
+
+	<h2>Naïve Bayes Classifier</h2>
+	<p>NBC info</p>
+
+	</div>
+
+{% endblock %}

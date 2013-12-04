@@ -1,76 +1,78 @@
 body {
   font-family: 'Source Sans Pro', sans-serif;
   color: #3c3c3c;
+  margin: 0 0 0 0;
+  width: 100%;
+  text-align: center;
+  background-image: url('../img/bg1.jpg');
+  background-size: cover;
+  background-repeat: none;
+  background-position: center center;
 }
-#container {
-  max-width: 960px;
-  margin: 0 auto;
+#container #landing {
+  text-align: center;
+  font-family: 'PT Mono';
 }
-#container header {
-  margin-top: 20px;
+#container #landing header {
+  margin-top: 250px;
 }
-#container header h1 {
+#container #landing header h1 {
   font-weight: 300;
   letter-spacing: 1px;
+  font-size: 3em;
+  font-family: 'PT Mono';
 }
-#container header h1 a {
-  color: #3c3c3c;
+#container #landing header h1 a {
+  color: white;
   text-decoration: none;
 }
-#container header h1 a:hover {
+#container #landing header h1 a:hover {
   text-decoration: underline;
 }
-#container form {
+#container #landing ::-webkit-input-placeholder {
+  font-family: 'PT Mono';
+  color: #ddd;
+}
+#container #landing :-moz-placeholder {
+  /* Firefox 18- */
+
+  font-family: 'PT Mono';
+  color: #ddd;
+}
+#container #landing ::-moz-placeholder {
+  /* Firefox 19+ */
+
+  font-family: 'PT Mono';
+  color: #ddd;
+}
+#container #landing :-ms-input-placeholder {
+  font-family: 'PT Mono';
+  color: #ddd;
+}
+#container #landing #id_location {
+  background: none;
+  color: white;
+  font-family: 'PT Mono';
+  height: 35px;
+  font-size: 25px;
+}
+#container #landing input[type="submit"] {
+  margin-top: 15px;
+  border: none;
+  background: none;
+  font-family: 'PT Mono';
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+#container #landing input[type="submit"]:hover {
+  text-decoration: underline;
+}
+#container #landing form {
   margin-top: 30px;
 }
-#container form #id_location,
-#container form #id_classifier {
-  height: 30px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  font-size: 20px;
-}
-#container form #id_location {
+#container #landing form #id_location {
   border: none;
   border-bottom: 1px solid #ccc;
   width: 70%;
-}
-#container form #id_classifier {
-  margin-left: 2%;
-  width: 25%;
-}
-#container #weather {
-  margin-top: 50px;
-}
-#container #weather h2 {
-  font-weight: 300;
-  text-transform: uppercase;
-}
-#container #weather .weather-location {
-  font-weight: 700;
-}
-#container #weather .weather-title {
-  color: #aaa;
-  font-weight: 300;
-}
-#container #weather #actual-weather,
-#container #weather #twitter-weather {
-  width: 49%;
-  display: inline-block;
-  vertical-align: top;
-  text-align: center;
-}
-#container #weather .weather-font {
-  font-family: 'MeteoconsRegular';
-}
-#container #weather .weather-font a {
-  text-decoration: none;
-  color: #5a5a5a;
-}
-#container #weather .weather-font .weather-icon {
-  font-size: 350px;
-}
-#container #weather .weather-font [data-icon]:before {
-  font-family: 'MeteoconsRegular';
-  content: attr(data-icon);
 }

@@ -20,11 +20,17 @@ class DecisionTree:
 		self.t_trees = []
 
 	def initialize_dt(self):
+		cwd = os.getcwd()
+		cwd = cwd.split('/')
+		if cwd[len(cwd)-1] == 'src':
+			data_path = '../data/'
+		else:
+			data_path = 'data/'
 		for i in range(15):
-			rel_path = 'data/decision_tree/dt_k{}.tree'.format(i+1)
+			rel_path = data_path + 'decision_tree/dt_k{}.tree'.format(i+1)
 			self.w_trees.append(self.load_tree(rel_path))
 		for i in range(4):
-			rel_path = 'data/decision_tree/dt_w{}.tree'.format(i+1)
+			rel_path = data_path + 'decision_tree/dt_w{}.tree'.format(i+1)
 			self.t_trees.append(self.load_tree(rel_path))
 
 	def classify_tweet(self, tweet):
@@ -167,12 +173,27 @@ class DecisionTree:
 			else:
 				correct += 1
 		accuracy = float(correct)/(correct+wrong)
-		print "Accuracy of tree is: {}".format(accuracy)
+		# print "Accuracy of tree is: {}".format(accuracy)
+		print accuracy
 
 	def load_tree(self, rel_path):
 		abs_path = os.path.abspath(rel_path)
 		f = open(abs_path, 'r')
 		dt = pickle.load(f)
 		return dt
+
+# tree = DecisionTree()
+# tree.initialize_dt()
+# data = tree.parser.load_data('../data/train_tree.csv')
+# pdb.set_trace()
+# data = tree.parser.porter_stem_data(data)
+# for i in range(4):
+# 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'w{}'.format(i+1))
+# 	tree.validate(tree.t_trees[i], pos_data, neg_data)
+# for i in range(15):
+# 	pos_data, neg_data = tree.parser.get_label_divided_data(data, 'k{}'.format(i+1))
+# 	tree.validate(tree.w_trees[i], pos_data, neg_data)
+
+
 
 

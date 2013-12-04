@@ -2,44 +2,26 @@
 
 {% load staticfiles %}
 
-{% block styles %}<link rel="stylesheet" type="text/css" href="{% static "fonts/weather.css" %}">{% endblock %}
+{% block styles %}<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}">{% endblock %}
 
 {% block title %}# WEATHER{% endblock %}
 
+{# {% block body_bg %}style="background-image: url('../static/img/bg3.jpg'));"{% endblock %} #}
+
 {% block content %}
+
+	<div id="landing">
 
 	<header>
 		<h1><a href="/"># WEATHER</a></h1>
 	</header>
 
-	<form action="/" method="GET">
+	<form action="/weather/" method="GET">
 	{{form.location}}
-	{{form.classifier}}
-	<input type="submit" value="Get weather">
+	<p><input type="submit" value="get weather"></p>
+	<p style="opacity: 0;">{{form.classifier}}</p>
 	</form>
-	{# {% if location %} #}
-	<div id="weather">
-		<h2>current weather in <span class="weather-location">{{location}}</span></h2>
-		<div id="twitter-weather">
-			<p class="weather-title">TWITTER WEATHER</p>
-			<div class="weather-font">
-				<a href="" data-icon="{{tweet_code}}" class="weather-icon weather-font"></a>
-			</div>
-			{% for c in tweet_conditions %}
-			<p>{{c}}</p>
-			{% endfor %}
-		</div>
-		<div id="actual-weather">
-			<p class="weather-title">ACTUAL WEATHER</p>
-			<div class="weather-font">
-			<a href="" data-icon="A" class="weather-icon"></a>
-			</div>
-			<p>{{actual_condition}}</p>
-			<p>Actual temperature: {{temp}} C</p>
-		</div>
-	</div>
-	{# {% endif %} #}
 
-	<footer></footer>
+	</div>
 
 {% endblock %}

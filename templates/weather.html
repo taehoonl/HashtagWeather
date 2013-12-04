@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block styles %}<link rel="stylesheet" type="text/css" href="{% static "css/weather.css" %}">{% endblock %}
+
+{% block title %}# WEATHER{% endblock %}
+
+{% block content %}
+
+
+	{% include "nav.html" %}
+
+<div id="weather">
+	<form action="/weather/" method="GET">
+	{{form.location}}
+	{{form.classifier}}
+	<input type="submit" value="get weather">
+	</form>
+
+	{% if error %}
+	<div id="weather-errror">
+		<h3>{{error}}</h3>
+	</div>
+	{% endif %}
+
+	{% if not error %}
+
+	{% if city %}
+	<div id="weather-info">
+		<h2>current weather in <span class="weather-location">{{city}}, {{region}}</span></h2>
+	</div>
+	<div id="weather-detail">
+		<div id="weather-temp">
+			{{temp}}&degC
+		</div>
+		<div id="weather-conditions">
+			<h3>Actual current weather conditions:</h3>
+			<p>{{actual_condition}}</p>
+			<h3 style="margin-top: 30px;">Weather conditions via Twitter:</h3>
+			{% for c in tweet_conditions %}
+			<p>{{c|title}}</p>
+			{% endfor %}
+		</div>
+	</div>
+	<div id="weather-tweets">
+		<h3>Relevant <span class="twitter">Tweets</span> about weather from {{city}}</h3>
+		<ul>
+			{% for tweet in label1_tweets %}
+			<li><p>{{tweet}}</p></li>
+			{% endfor %}
+			{% for tweet in label2_tweets %}
+			<li><p>{{tweet}}</p></li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+
+	{% endif %}
+
+</div>
+
+<!-- 	<div id="weather">
+		<h2>current weather in <span class="weather-location">{{location}}</span></h2>
+		<div id="twitter-weather">
+			<p class="weather-title">TWITTER WEATHER</p>
+			<div class="weather-font">
+				<a href="" data-icon="{{tweet_code}}" class="weather-icon weather-font"></a>
+			</div>
+			{% for c in tweet_conditions %}
+			<p>{{c}}</p>
+			{% endfor %}
+		</div>
+		<div id="actual-weather">
+			<p class="weather-title">ACTUAL WEATHER</p>
+			<div class="weather-font">
+			<a href="" data-icon="A" class="weather-icon"></a>
+			</div>
+			<p>{{actual_condition}}</p>
+			<p>Actual temperature: {{temp}} C</p>
+		</div>
+	</div>
+	<div id="tweets">
+		<p>Supporting tweets</p>
+		<ul>
+			<li></li>
+			{% for l in label1_tweets %}
+			<li>{{l}}</li>
+			{% endfor %}
+			{% for l in label2_tweets %}
+			<li>{{l}}</li>
+			{% endfor %}
+		</ul>
+	</div> -->
+
+<!-- 	<footer>
+		<ul>
+			<li><a href="">About</a></li>
+			<li><a href="">Algorithm</a></li>
+			<li><a href="">Github</a></li>
+		</ul>
+	</footer> -->
+
+{% endblock %}

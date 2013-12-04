@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block styles %}<link rel="stylesheet" type="text/css" href="{% static "css/weather.css" %}">{% endblock %}
+
+{% block title %}# WEATHER{% endblock %}
+
+{% block content %}
+
+
+	{% include "nav.html" %}
+
+	<div id="about">
+	<h1>motivation</h1>
+	<p>What type of information do we unconciously post online? And what can we find out from a huge aggregate of publically available social network data? We wanted to see if we can extract the current weather of the United States by analyzing the Tweets that people post on their <a href="http://twitter.com">Twitter</a> accounts. We wanted to show that there is great amount of information that we could use to solve problems on the information that people post on SNS.</p>
+	<p>This project was done by 4 Cornell computer science students Seok Hyun Jin, Matthew Kim, <a href="http://suchanlee.com">Suchan Lee</a>, and <a href="http://www.taehoonlee.com">Taehoon Kim</a> for the <a href="http://machine-learning-course.joachims.org">Machine Learning class</a> taught by Professor <a href="http://joachims.org">Thorsten Joachims</a>.</p>
+
+	<h1>method</h1>
+	<p>The service works as follows:
+		<ol>
+			<li>User makes a query (location)</li>
+			<li>The location is geocoded into latitude/longitude</li>
+			<li>The query is used to search for relevant Tweets in our Tweets database</li>
+			<li>The desired classifier is chosen to classify the relevant Tweets to classify them to some weather category</li>
+			<li>The top two most selected weather category is chosen and displayed to the user with selected Tweets</li>
+		</ol>
+	</p>
+	<p>Check out our algorithms section <a href="/algorithms/">here</a>.</p>
+	</div>
+
+{% endblock %}
