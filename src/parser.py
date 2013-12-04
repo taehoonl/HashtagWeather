@@ -71,7 +71,6 @@ class Parser:
 		index = {}
 		index_map = {}
 		map_count = 1
-		# pdb.set_trace()
 		for tweet_id, tweet in labeled_data:
 			for word in tweet:
 				try:

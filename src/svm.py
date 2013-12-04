@@ -18,6 +18,10 @@ class SVM:
 		self.data = None
 		self.index = None
 		self.index_map = None
+		self.threshold = 0.7
+		self.weather_labels = ["clouds", "cold", "dry", "hot", "humid", "hurricane",
+							   "I can't tell", "ice", "other", "rain", "snow", "storms",
+							   "sun", "tornado", "wind"]
 
 	def initialize_svm(self):
 		# get file path, depending on the location from which the class is called
@@ -170,5 +174,24 @@ class SVM:
 			print 'You have yet to load the models.'
 			print 'Please load all models with load_all_models()'
 			return None
+
+	def classify_tweets(self, tweets, formatted_tweets):
+		weather_class = []
+		tweet_dict = {}
+		count = 0
+		for model in self.weather_models:
+			scores = self.classify(model, formatted_tweets)
+			weather_class.append(scores)
+			for i in range(len(scores)):
+				if scores[i] > self.threshold:
+					try:
+						tweet_dict[self.weather_labels[count]].append(tweets[i])
+					except:
+						tweet_dict[self.weather_labels[count]] = [tweets[i]]
+			count += 1
+		results = []
+		for i in range(len(weather_class)):
+			results.append([sum(weather_class[i]), self.weather_labels[i]])
+		return results, tweet_dict
 
 

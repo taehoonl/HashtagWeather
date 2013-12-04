@@ -82,7 +82,7 @@ class Views:
 
 	def get_relevant_tweets(self, lat, lng, rad=15):
 		tweets = self.classifier.tweet_querier.query_coord(lng, lat, rad)
-		tweets = self.classifier.svm.get_weather_tweets(tweets)
+		# tweets = self.classifier.svm.get_weather_tweets(tweets)
 		return tweets
 
 	def classify_many_tweets(self, classifier, tweets):
@@ -90,23 +90,35 @@ class Views:
 		condition_list = []
 		code_list = []
 		print 'Classifying tweets with {}........'.format(classifier)
-		self.cur_tweets = {}
-		for tweet in tweets:
-			code, conditions = self.classify(classifier, tweet)
-			for condition in conditions:
-				print condition
-				if condition != "I can't tell":
-					try:
-						condition_map[condition] += 1
-						self.cur_tweets[condition].append(tweet)
-					except:
-						condition_map[condition] = 1
-						self.cur_tweets[condition] = [tweet]
-
-		keys = condition_map.keys()
-		for key in keys:
-			condition_list.append([condition_map[key], key])
-		condition_list.sort(reverse=True)
+		formatted_tweets = []
+		if classifier == 'svm':
+			for tweet in tweets:
+				tweet = self.classifier.svm.parser.stem_sentence_porter(tweet)
+				formatted_tweets.append(self.classifier.svm.format_tweet_for_svmlight(tweet)[0])
+			condition_list, tweet_dict = self.classifier.svm.classify_tweets(tweets, formatted_tweets)
+			self.cur_tweets = tweet_dict
+			condition_list.sort(reverse=True)
+			if condition_list[0][1] == "I can't tell":
+				condition_list.remove(condition_list[0])
+			elif condition_list[1][1] == "I can't tell":
+				condition_list.remove(condition_list[1])
+		else:
+			self.cur_tweets = {}
+			for tweet in tweets:
+				code, conditions = self.classify(classifier, tweet)
+				for condition in conditions:
+					print condition
+					if condition != "I can't tell":
+						try:
+							condition_map[condition] += 1
+							self.cur_tweets[condition].append(tweet)
+						except:
+							condition_map[condition] = 1
+							self.cur_tweets[condition] = [tweet]
+			keys = condition_map.keys()
+			for key in keys:
+				condition_list.append([condition_map[key], key])
+			condition_list.sort(reverse=True)
 
 		code = None
 		print condition_list
